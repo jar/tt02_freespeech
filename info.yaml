@@ -1,11 +1,11 @@
 --- 
 # TinyTapeout project information
 project:
-  wokwi_id:    0        # If using wokwi, set this to your project's ID
-#  source_files:        # If using an HDL, set wokwi_id as 0 and uncomment and list your source files here. Source files must be in ./src
-#    - counter.v
-#    - decoder.v
-#  top_module:  "seven_segment_seconds"      # put the name of your top module here, make it unique by prepending your github username
+  wokwi_id: 0
+  source_files:
+    - illegal_logic.v
+    - decoder.v
+  top_module:  "jar_illegal_logic"
 
 # As everyone will have access to all designs, try to make it easy for someone new to your design to know what
 # it does and how to operate it.
@@ -14,28 +14,28 @@ project:
 #
 # This info will be automatically collected and used to make a datasheet for the chip.
 documentation: 
-  author:       ""      # Your name
-  discord:      ""      # Your discord handle
-  title:        ""      # Project title
-  description:  ""      # Short description of what your project does
+  author:       "James Ross"
+  discord:      "jar"
+  title:        "Illegal Logic"
+  description:  "This circuit logic emits a sequences of 32 hexadecimal digits to the 7 segment display which may be considered illegal in certain jurisdictions. The sequence is considered to be an illegal number."
   how_it_works: ""      # Longer description of how the project works
-  how_to_test:  ""      # Instructions on how someone could test your project, include things like what buttons do what and how to set the clock if needed
-  external_hw:  ""      # Describe any external hardware needed
-  language:     "wokwi" # other examples include Verilog, Amaranth, VHDL, etc
+  how_to_test:  "First, raise the reset I/O (io_in[1]) high.  Then Output Enable (io_in[2]) high for 32 cycles."
+  external_hw:  "The 7-segment display is used directly."
+  language:     "verilog"
   doc_link:     ""      # URL to longer form documentation, eg the README.md in your repository
   clock_hz:     0       # Clock frequency in Hz (if required)
   picture:      ""      # relative path to a picture in your repository
   inputs:               # a description of what the inputs do
     - clock
     - reset
-    - none
+    - oe
     - none
     - none
     - none
     - none
     - none
   outputs:
-    - segment a         # a description of what the outputs do
+    - segment a
     - segment b
     - segment c
     - segment d

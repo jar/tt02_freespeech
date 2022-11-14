@@ -1,0 +1,109 @@
+#include <verilated.h>
+#include <cstdint>
+#include "Vjar_illegal_logic.h"
+
+#define tick() do{io_in->clk=1;top->eval();}while(0)
+#define tock() do{io_in->clk=0;top->eval();}while(0)
+#define ticktock() do{tick();tock();}while(0)
+
+typedef struct {
+	union {
+		uint8_t input;
+		struct {
+			uint8_t clk    : 1;
+			uint8_t reset  : 1;
+			uint8_t oe     : 1;
+			uint8_t unused : 5;
+		};
+	};
+} input_t;
+
+typedef struct {
+	union {
+		uint8_t output;
+		struct {
+			uint8_t a : 1;
+			uint8_t b : 1;
+			uint8_t c : 1;
+			uint8_t d : 1;
+			uint8_t e : 1;
+			uint8_t f : 1;
+			uint8_t g : 1;
+			uint8_t unused : 1;
+		};
+	};
+} output_t;
+
+void print_7segment(output_t v)
+{
+//  ---A---
+// |       |
+// F       B
+// |       |
+//  ---G---
+// |       |
+// E       C
+// |       |
+//  ---D---
+#if 0
+	v.a?puts(".------."):puts("        ");
+	for(int i=0;i<3;i++)printf("%c      %c\n",v.f?'|':' ',v.b?'|':' ');
+	v.g?puts(" ------ "):puts("        ");
+	for(int i=0;i<3;i++)printf("%c      %c\n",v.e?'|':' ',v.c?'|':' ');
+	v.d?puts("'------'"):puts("        ");
+#else
+	static int c = 0;
+	uint8_t x = *(uint8_t*)&v;
+	switch(x) {
+		case 0x3f: printf("0"); break;
+		case 0x06: printf("1"); break;
+		case 0x5b: printf("2"); break;
+		case 0x4f: printf("3"); break;
+		case 0x66: printf("4"); break;
+		case 0x6d: printf("5"); break;
+		case 0x7d: printf("6"); break;
+		case 0x07: printf("7"); break;
+		case 0x7f: printf("8"); break;
+		case 0x67: printf("9"); break;
+		case 0x77: printf("A"); break;
+		case 0x7c: printf("B"); break;
+		case 0x58: printf("C"); break;
+		case 0x5e: printf("D"); break;
+		case 0x79: printf("E"); break;
+		case 0x71: printf("F"); break;
+		default: printf("?"); break;
+	}
+	if (c%2) printf(" ");
+	c++;
+#endif
+}
+
+int main(int argc, char* argv[])
+{
+	VerilatedContext* vcp = new VerilatedContext;
+	vcp->commandArgs(argc, argv);
+	Vjar_illegal_logic* top = new Vjar_illegal_logic{vcp};
+
+	int err = 0;
+	input_t* io_in = (input_t*)&(top->io_in);
+
+	io_in->reset = 1;
+	ticktock();
+	io_in->reset = 0;
+
+	io_in->oe = 1;
+	for (int i = 0; i < 32; i++) {
+		tick();
+		tock();
+		output_t val = *(output_t*)&(top->io_out);
+		print_7segment(val);
+	}
+	printf("\n");
+
+	top->final();
+	delete top;
+
+	if (err) puts("ERROR!");
+
+	return err;
+}
