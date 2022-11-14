@@ -7,10 +7,10 @@ module jar_illegal_logic
 	wire reset = io_in[1];
 	wire oe    = io_in[2];
 	wire [6:0] led_out;
-	assign io_out[6:0] = (oe) ? led_out : 7'bz;
+	assign io_out[6:0] = (oe) ? led_out : 7'b0;
 
 	reg [4:0] index;
-	reg [3:0] hex;
+	wire [3:0] hex;
 
 	wire v0 = index[4];
 	wire v1 = index[3];
