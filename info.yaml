@@ -18,14 +18,14 @@ documentation:
   discord:      "jar"
   title:        "Illegal Logic"
   description:  "This circuit logic emits a sequences of 32 hexadecimal digits to the 7 segment display which may be considered illegal in certain jurisdictions. The sequence is considered to be an illegal number."
-  how_it_works: ""      # Longer description of how the project works
+  how_it_works: "There is some combinatorial logic which generates 32 numbers and then decodes those digits to the 7 segment display."
   how_to_test:  "First, raise the reset I/O (io_in[1]) high.  Then Output Enable (io_in[2]) high for 32 cycles."
   external_hw:  "The 7-segment display is used directly."
   language:     "verilog"
   doc_link:     ""      # URL to longer form documentation, eg the README.md in your repository
   clock_hz:     0       # Clock frequency in Hz (if required)
   picture:      ""      # relative path to a picture in your repository
-  inputs:               # a description of what the inputs do
+  inputs:
     - clock
     - reset
     - oe
