@@ -1,22 +1,6 @@
 #include <verilated.h>
 #include <cstdint>
-#include "Vjar_illegal_logic.h"
-
-#define tick() do{io_in->clk=1;top->eval();}while(0)
-#define tock() do{io_in->clk=0;top->eval();}while(0)
-#define ticktock() do{tick();tock();}while(0)
-
-typedef struct {
-	union {
-		uint8_t input;
-		struct {
-			uint8_t clk    : 1;
-			uint8_t reset  : 1;
-			uint8_t oe     : 1;
-			uint8_t unused : 5;
-		};
-	};
-} input_t;
+#include "Vjar_pi.h"
 
 typedef struct {
 	union {
@@ -46,11 +30,11 @@ void print_7segment(output_t v)
 // |       |
 //  ---D---
 #if 0
-	v.a?puts(".------."):puts("        ");
-	for(int i=0;i<3;i++)printf("%c      %c\n",v.f?'|':' ',v.b?'|':' ');
-	v.g?puts(" ------ "):puts("        ");
-	for(int i=0;i<3;i++)printf("%c      %c\n",v.e?'|':' ',v.c?'|':' ');
-	v.d?puts("'------'"):puts("        ");
+	v.a?puts("╔══════╗"):puts("        ");
+	for(int i=0;i<3;i++)printf("%s      %s\n",v.f?"║":" ",v.b?"║":" ");
+	v.g?puts("├══════┤"):puts("├      ┤");
+	for(int i=0;i<3;i++)printf("%s      %s\n",v.e?"║":" ",v.c?"║":" ");
+	v.d?puts("╚══════╝"):puts("        ");
 #else
 	static int c = 0;
 	uint8_t x = *(uint8_t*)&v;
@@ -73,7 +57,6 @@ void print_7segment(output_t v)
 		case 0x71: printf("F"); break;
 		default: printf("?"); break;
 	}
-	if (c%2) printf(" ");
 	c++;
 #endif
 }
@@ -82,19 +65,13 @@ int main(int argc, char* argv[])
 {
 	VerilatedContext* vcp = new VerilatedContext;
 	vcp->commandArgs(argc, argv);
-	Vjar_illegal_logic* top = new Vjar_illegal_logic{vcp};
+	Vjar_pi* top = new Vjar_pi{vcp};
 
 	int err = 0;
-	input_t* io_in = (input_t*)&(top->io_in);
 
-	io_in->reset = 1;
-	ticktock();
-	io_in->reset = 0;
-
-	io_in->oe = 1;
-	for (int i = 0; i < 32; i++) {
-		tick();
-		tock();
+	for (int i = 0; i < 256; i++) {
+		top->io_in = i;
+		top->eval();
 		output_t val = *(output_t*)&(top->io_out);
 		print_7segment(val);
 	}

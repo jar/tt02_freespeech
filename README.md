@@ -1,16 +1,15 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg)
 
-# Tiny Tapeout Illegal Logic
+# Tiny Tapeout Pi (π)
 
-This circuit logic emits a sequences of 32 hexadecimal digits to the 7 segment
-display which may be considered illegal in certain jurisdictions. The sequence
-is considered to be an illegal number.
-
+This circuit logic emits the first 256 decimal digits of Pi to the 7 segment
+display.  A previous circuit in this repository only used 4% of the die area,
+which seemed like a waste of space.
 
 ## How to use
 
-First, raise the reset I/O (io\_in[1]) high.  Then Output Enable (io\_in[2])
-high for 32 cycles. The 7 segment output display is used directly.
+Pass the index value in (0-255).  The digit corresponding to that index is
+emitted directly to the 7 segment display.
 
 ## What is Tiny Tapeout?
 

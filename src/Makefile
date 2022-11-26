@@ -6,10 +6,10 @@ VERILATOR = $(VERILATOR_ROOT)/bin/verilator
 endif
 
 all:
-	$(VERILATOR) -cc -CFLAGS "-O3 -Wall" --exe --build -j decoder.v illegal_logic.v --top-module jar_illegal_logic main.cpp
+	$(VERILATOR) -cc -CFLAGS "-O3 -Wall" --exe --build -j decoder.v pi.v --top-module jar_pi main.cpp
 
 test: all
-	./obj_dir/Vjar_illegal_logic
+	./obj_dir/Vjar_pi
 
 .PHONY: clean distclean
 
