@@ -15,7 +15,7 @@ project:
 # This info will be automatically collected and used to make a datasheet for the chip.
 documentation: 
   author:       "James Ross"
-  discord:      "jar"
+  discord:      "jar#1709"
   title:        "Illegal Logic"
   description:  "This circuit logic emits a sequences of 32 hexadecimal digits to the 7 segment display which may be considered illegal in certain jurisdictions. The sequence is considered to be an illegal number."
   how_it_works: "There is some combinatorial logic which generates 32 numbers and then decodes those digits to the 7 segment display."
@@ -23,7 +23,7 @@ documentation:
   external_hw:  "The 7-segment display is used directly."
   language:     "verilog"
   doc_link:     ""      # URL to longer form documentation, eg the README.md in your repository
-  clock_hz:     0       # Clock frequency in Hz (if required)
+  clock_hz:     0       # Clock frequency in Hz (if required) we are expecting max clock frequency to be ~6khz. Provided on input 0.
   picture:      ""      # relative path to a picture in your repository
   inputs:
     - clock
