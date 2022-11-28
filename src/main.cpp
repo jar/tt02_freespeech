@@ -2,6 +2,21 @@
 #include <cstdint>
 #include "Vjar_pi.h"
 
+#define tick() do{io_in->clk=1;top->eval();}while(0)
+#define tock() do{io_in->clk=0;top->eval();}while(0)
+#define ticktock() do{tick();tock();}while(0)
+
+typedef struct {
+	union {
+		uint8_t input;
+		struct {
+			uint8_t clk    : 1;
+			uint8_t reset  : 1;
+			uint8_t stream : 1;
+			uint8_t index  : 5;
+		};
+	};
+} input_t;
 typedef struct {
 	union {
 		uint8_t output;
@@ -13,7 +28,7 @@ typedef struct {
 			uint8_t e : 1;
 			uint8_t f : 1;
 			uint8_t g : 1;
-			uint8_t unused : 1;
+			uint8_t h : 1;
 		};
 	};
 } output_t;
@@ -27,14 +42,15 @@ void print_7segment(output_t v)
 //  ---G---
 // |       |
 // E       C
-// |       |
-//  ---D---
+// |       |  _
+//  ---D---  |H|
 #if 0
 	v.a?puts("╔══════╗"):puts("        ");
 	for(int i=0;i<3;i++)printf("%s      %s\n",v.f?"║":" ",v.b?"║":" ");
 	v.g?puts("├══════┤"):puts("├      ┤");
 	for(int i=0;i<3;i++)printf("%s      %s\n",v.e?"║":" ",v.c?"║":" ");
-	v.d?puts("╚══════╝"):puts("        ");
+	v.d?printf("╚══════╝"):printf("        ");
+	printf(" %s\n",v.h?"●":"◯");
 #else
 	static int c = 0;
 	uint8_t x = *(uint8_t*)&v;
@@ -49,12 +65,7 @@ void print_7segment(output_t v)
 		case 0x07: printf("7"); break;
 		case 0x7f: printf("8"); break;
 		case 0x67: printf("9"); break;
-		case 0x77: printf("A"); break;
-		case 0x7c: printf("B"); break;
-		case 0x58: printf("C"); break;
-		case 0x5e: printf("D"); break;
-		case 0x79: printf("E"); break;
-		case 0x71: printf("F"); break;
+		case 0x80: printf("."); break;
 		default: printf("?"); break;
 	}
 	c++;
@@ -67,11 +78,20 @@ int main(int argc, char* argv[])
 	vcp->commandArgs(argc, argv);
 	Vjar_pi* top = new Vjar_pi{vcp};
 
+	input_t* io_in = (input_t*)&(top->io_in);
+
 	int err = 0;
 
-	for (int i = 0; i < 256; i++) {
-		top->io_in = i;
-		top->eval();
+	io_in->reset = 1;
+	io_in->index = 0; // start index (low 5 bits)
+	ticktock();
+	io_in->index = 0; // start index (high 5 bits)
+	ticktock();
+	io_in->reset = 0;
+
+	io_in->stream = 1;
+	for (int i = 0; i < 1024; i++) {
+		ticktock();
 		output_t val = *(output_t*)&(top->io_out);
 		print_7segment(val);
 	}

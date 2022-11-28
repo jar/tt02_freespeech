@@ -27,12 +27,8 @@ module seg7hex (
 			4'd07: segments = 8'b00000111; // 7
 			4'd08: segments = 8'b01111111; // 8
 			4'd09: segments = 8'b01100111; // 9
-			4'd10: segments = 8'b01110111; // A
-			4'd11: segments = 8'b01111100; // b
-			4'd12: segments = 8'b01011000; // c
-			4'd13: segments = 8'b01011110; // d
-			4'd14: segments = 8'b01111001; // E
-			4'd15: segments = 8'b01110001; // F
+			4'd10: segments = 8'b10000000; // .
+			default: segments = 8'b00000000; // [blank]
 		endcase
 	end
 endmodule
