@@ -66,7 +66,7 @@ void print_7segment(output_t v)
 		case 0x7f: printf("8"); break;
 		case 0x67: printf("9"); break;
 		case 0x80: printf("."); break;
-		default: printf("?"); break;
+		default: printf("?[%d]", x); break;
 	}
 	c++;
 #endif

@@ -10,25 +10,26 @@
 	  ---4---   |8|
 */
 
-module seg7hex (
+module decoder (
 	input wire [3:0] hex,
-	output reg [7:0] segments
+	output wire [7:0] segments
 );
-	always @(*) begin
-		case(hex)
-			//                   87654321
-			4'd00: segments = 8'b00111111; // 0
-			4'd01: segments = 8'b00000110; // 1
-			4'd02: segments = 8'b01011011; // 2
-			4'd03: segments = 8'b01001111; // 3
-			4'd04: segments = 8'b01100110; // 4
-			4'd05: segments = 8'b01101101; // 5
-			4'd06: segments = 8'b01111101; // 6
-			4'd07: segments = 8'b00000111; // 7
-			4'd08: segments = 8'b01111111; // 8
-			4'd09: segments = 8'b01100111; // 9
-			4'd10: segments = 8'b10000000; // .
-			default: segments = 8'b00000000; // [blank]
-		endcase
-	end
+	wire v0 = hex[3];
+	wire v1 = hex[2];
+	wire v2 = hex[1];
+	wire v3 = hex[0];
+
+	wire n0 = !v0;
+	wire n1 = !v1;
+	wire n2 = !v2;
+	wire n3 = !v3;
+
+	assign segments[7] = (v0&n1&v2&n3);
+	assign segments[6] = (v0&n1&n2) | (n0&v1&n3) | (n0&n1&v2) | (n0&v1&n2&v3);
+	assign segments[5] = (v0&n1&n2) | (n0&v1&n3) | (n0&v1&n2&v3) | (n1&n2&n3);
+	assign segments[4] = (n0&v2&n3) | (n1&n2&n3);
+	assign segments[3] = (n0&v2&n3) | (n0&n1&v2) | (n0&v1&n2&v3) | (n1&n2&n3);
+	assign segments[2] = (n0&v2&v3) | (n0&v1&n3) | (n0&v1&n2&v3) | (n1&n2);
+	assign segments[1] = (n0&n2&n3) | (n0&v2&v3) | (n0&n1&v2) | (n1&n2);
+	assign segments[0] = (v0&n1&n2) | (n0&v2&v3) | (n0&v2&n3) | (n0&v1&n2&v3) | (n1&n2&n3);
 endmodule
