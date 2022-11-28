@@ -8,20 +8,21 @@ module jar_pi
 	wire       stream   = io_in[2];
 	wire [4:0] io_index = io_in[7:3];
 
-	reg [8:0] index;
+	reg [9:0] index;
 	reg [7:0] led_out;
 	wire [3:0] hex;
 	assign io_out[7:0] = led_out;
 
-	wire v0 = index[8];
-	wire v1 = index[7];
-	wire v2 = index[6];
-	wire v3 = index[5];
-	wire v4 = index[4];
-	wire v5 = index[3];
-	wire v6 = index[2];
-	wire v7 = index[1];
-	wire v8 = index[0];
+	wire v0 = index[9];
+	wire v1 = index[8];
+	wire v2 = index[7];
+	wire v3 = index[6];
+	wire v4 = index[5];
+	wire v5 = index[4];
+	wire v6 = index[3];
+	wire v7 = index[2];
+	wire v8 = index[1];
+	wire v9 = index[0];
 
 	wire n0 = !v0;
 	wire n1 = !v1;
@@ -32,182 +33,358 @@ module jar_pi
 	wire n6 = !v6;
 	wire n7 = !v7;
 	wire n8 = !v8;
+	wire n9 = !v9;
 
 	always @(posedge clk) begin
 		if (reset) begin
-			index <= {io_index, index[8:5]};
+			index <= {io_index, index[9:5]};
 		end
 		else if (stream) begin
 			index <= index + 1;
 		end
 
-hex[3] <= (v0&n1&n2&n3&v4&v5&n6&n7&n8) | (n0&n1&n2&v3&n4&v5&v6&v7
-    &n8) | (v0&v1&n2&v3&v4&v5&n6&n7&v8) | (n0&n1&n2&n3&n4&n5&v6
-    &v7&n8) | (n0&n1&v2&v3&n4&n5&v6&v7&n8) | (v0&v1&v2&n3&v4&v5&n6
-    &n7&v8) | (v0&v1&n2&n3&n4&n5&v6&n7&v8) | (v0&n1&n2&n3&v4&v5
-    &v6&n7&v8) | (n0&n1&n2&v3&n4&n5&v6&n7&n8) | (n0&v1&n2&n3
-    &v4&n5&v6&n7&n8) | (n0&n1&v2&v3&n4&v5&v6&n7&n8) | (n0&n1&n2
-    &n3&n4&n5&n6&n7&v8) | (n0&n1&v2&v3&v4&v5&v6&n7&v8) | (v0&n1
-    &v2&v3&n4&n5&n6&v7&n8) | (v0&v1&n2&n3&v4&v5&v6&v7&v8) | (v0&v1
-    &n2&n3&n4&v5&n6&n7&n8) | (n0&n1&n2&v3&v4&v5&n6&n7&n8) | (
-    v0&n1&v2&n3&n4&v5&n6&n7&v8) | (n0&v1&v2&n3&n4&v5&n6&n7&n8) | (
-    v0&n2&v3&v4&n5&n6&v7&n8) | (v0&v1&v2&n3&v4&n6&v7&n8) | (v0&v1
-    &v2&v3&n4&n5&n6&v7) | (v0&n1&n2&v3&v4&v5&v6&v7) | (v0&v1&n3&n4
-    &n5&n6&n7&n8) | (n0&v2&v3&n4&v5&n6&v7&n8) | (v0&v2&n3&n4&n5
-    &n6&v7&v8) | (v0&v1&v2&v3&v4&n5&n6&v8) | (v0&v1&v2&v3&v4&n5&v6&v7) | (
-    v0&v1&v2&v3&n4&v5&n7&n8) | (n0&n1&n2&n3&v4&n6&v7&v8) | (n0
-    &v1&v2&n3&n4&v6&v7&n8) | (n0&v1&n2&v3&v4&v5&v6&v7) | (v0&n1&n2
-    &n3&n4&n5&n7&n8) | (n0&n1&n2&v3&n4&n5&v7&v8) | (n0&v1&n2
-    &n4&n5&n6&v7&n8) | (v0&n1&v2&v4&n5&v6&v7&n8) | (n1&v2&n3&n4
-    &v5&v6&v7&v8) | (n0&v1&v2&n3&v4&v6&v7&v8) | (v0&v1&n2&v4&n5&n6
-    &n7&n8) | (v0&n1&v2&v3&n4&n5&n7&v8) | (n0&v1&n2&n3&n5&v6&v7
-    &v8) | (n0&n1&v2&n3&n4&v5&v7&v8) | (n1&n2&n3&n4&v5&v6&n7&n8) | (
-    n0&v1&n2&v3&v5&v6&n7&n8) | (n0&v1&n2&n3&v4&n6&n7&v8) | (n0
-    &n1&v2&v4&n5&n6&v7&n8) | (v0&n1&v2&v3&n5&v6&n7&v8) | (n1&v2
-    &n3&n4&n5&v6&n7&n8) | (n1&v2&n3&v4&n5&n6&n7&v8) | (n0&n1
-    &v2&n3&v4&n6&n7&v8) | (n0&n2&v3&v4&n5&v6&n7&v8) | (n0&v2&v3
-    &n4&n5&v6&n7&v8) | (n0&n1&v2&n3&v4&n5&n7&v8) | (n0&v1&v2&n4
-    &v5&v6&n7&v8) | (v0&v1&n2&v3&n4&n5&n6&v8) | (n0&v1&n3&n4&n5
-    &n6&v7&n8) | (v0&n2&v3&n4&n5&v6&v7&v8) | (n0&n1&v3&v4&v5&n6
-    &v7&v8) | (n0&v1&v2&v3&v4&v5&n6&n8) | (n0&n1&n2&v3&v5&n6&v7&v8) | (
-    n0&n2&v3&v4&v5&v6&v7&v8) | (v0&v2&n3&n4&v5&v6&n7&n8) | (n0&n1
-    &n2&n3&v5&v6&v7&v8) | (v0&v1&v2&n3&n4&v5&v6&n7) | (n0&v1&n3&v4
-    &n5&n6&n7&v8) | (n0&n1&v2&n3&v4&n5&n6&n7) | (n0&n1&n2&n4
-    &v5&v6&n7&v8) | (v1&v3&n4&v5&n6&v7&n8);
+hex[3] <= (v0&v1&n2&v3&v4&n5&n6&v7&v8&n9) | (v0&n1&n2&v3&n4&n5&n6
+    &v7&v8&n9) | (v0&n1&v2&n3&v4&v5&v6&n7&v8&n9) | (v0&v1&v2&v3&n4
+    &v5&n6&v7&n8&n9) | (n0&n1&n2&v3&v4&n5&n6&v7&v8&n9) | (n0&v1
+    &n2&n3&n4&v5&v6&n7&n8&n9) | (n0&n1&n2&n3&n4&n5&n6&v7&v8
+    &n9) | (n0&v1&v2&v3&n4&v5&v6&n7&n8&v9) | (n0&n1&v2&n3&n4&v5
+    &n6&v7&n8&n9) | (n0&n1&n2&n3&v4&n5&n6&v7&n8&n9) | (n0&n1
+    &n2&n3&n4&n5&n6&n7&n8&v9) | (n0&v1&v2&n3&n4&n5&n6&v7&n8
+    &v9) | (v0&v1&n2&v3&v4&v5&v6&v7&v8&v9) | (v0&n1&n2&v3&n4&v5&n6
+    &n7&v8&v9) | (n0&v1&n2&v3&v4&n5&n6&n7&v8&n9) | (v0&v1&v2&n3
+    &v4&n5&v6&v7&v8&n9) | (v0&v1&n2&n3&v4&n5&v6&v7&v8&v9) | (v0&v1
+    &v2&v3&v4&n5&n6&v7&v8&v9) | (n0&v1&v2&n3&n4&v5&v6&v7&v8&v9) | (
+    n0&n1&n2&n3&v4&n5&v6&v7&v8&n9) | (v0&v1&n2&n3&v4&n5&v6&n7
+    &n8&n9) | (n0&n1&n2&n3&v4&v5&v6&n7&n8&n9) | (n0&v1&n2&n3
+    &n4&v5&v6&v7&n8&v9) | (n0&v1&n2&v3&n4&n5&v6&n7&n8&v9) | (n0
+    &n1&v2&v3&n4&n5&v6&n7&n8&n9) | (v0&n1&v2&n3&n4&n5&n6&n7
+    &n8&n9) | (v0&n1&v2&v3&n4&v5&v6&v8&n9) | (v0&v1&n2&v3&v5&n6&n7
+    &v8&n9) | (n0&v1&v2&v3&n4&v5&n7&v8&n9) | (n0&v1&n2&v3&v5&n6
+    &v7&v8&n9) | (v0&n1&v2&v3&v5&n6&n7&v8&n9) | (n0&v1&n3&v4&v5&n6
+    &n7&v8&n9) | (n0&n1&n2&v3&v5&n6&n7&v8&n9) | (v0&v1&n2&n3&n4
+    &v6&n7&v8&v9) | (n0&n1&v2&v3&n4&v5&v7&v8&v9) | (n0&n1&v3&v4&n5
+    &v6&n7&v8&n9) | (v0&v1&v2&v4&n5&v6&n7&v8&v9) | (n0&v1&n2&n3&v4
+    &v5&v6&v7&v8) | (v0&n2&v3&v4&v5&n6&n7&n8&n9) | (n0&n1&v2&v3&n4
+    &n5&v7&v8&n9) | (n1&n2&v3&n4&n5&v6&n7&v8&v9) | (n0&v1&v2&v3
+    &v4&v5&n6&v7&v8) | (v0&n1&v2&n3&v4&n6&v7&v8&n9) | (n0&n1&n2
+    &n3&n4&v5&n7&v8&v9) | (v0&v1&v2&n3&v4&v5&n6&v8&v9) | (n1&n2&v3
+    &v4&v5&v6&v7&n8&v9) | (v0&n1&n2&n3&n5&v6&n7&v8&n9) | (v0&v1&n3
+    &v4&v5&v6&v7&n8&v9) | (v1&n2&v3&n4&v5&n6&n7&n8&v9) | (n0&v1&v3
+    &n4&n5&n6&n7&v8&v9) | (v0&v1&v2&n4&v5&n6&n7&n8&v9) | (n0&n2
+    &v3&n4&n5&v6&v7&v8&v9) | (n0&n1&n2&n3&n4&v6&v7&v8&v9) | (n1
+    &n2&v3&v4&n5&v6&v7&n8&n9) | (n0&n1&n2&v3&n4&v5&n7&n8&v9) | (
+    v0&v2&v3&n4&v5&v6&v7&n8&v9) | (v0&v1&v3&v4&n5&v6&n7&n8&v9) | (
+    n0&n1&v2&n3&v4&v5&v6&v7&v8) | (v0&v1&n2&n4&n5&n6&v7&n8&v9) | (
+    v0&n1&n2&n3&v4&n5&n6&v7&v8) | (v0&v1&v2&v3&n5&v6&n7&n8&n9) | (
+    n0&n1&n2&v3&n4&v5&n6&n8&v9) | (v0&n2&v3&n4&n5&v6&v7&n8&v9) | (
+    n0&v1&n3&v4&n5&n6&v7&v8&v9) | (n0&v1&n2&v3&v4&n6&v7&n8&v9) | (
+    n0&n1&n2&n3&v4&n5&n7&v8&v9) | (n0&v1&v2&v3&v4&n5&n6&n7&v8) | (
+    n0&v1&v2&v3&v4&n5&v6&n8&n9) | (v0&n1&v2&n3&n5&v6&v7&v8&v9) | (
+    v0&v1&n2&n3&v4&n6&n7&n8&v9) | (v1&v2&n3&v4&v5&v6&n7&n8&v9) | (
+    n0&n1&v2&n3&n4&n6&v7&v8&v9) | (n0&v1&v2&n4&n5&n6&n7&n8&n9) | (
+    n0&n2&v3&n4&n5&n6&v7&n8&n9) | (v0&v2&n3&v4&v5&v6&n7&n8&v9) | (
+    v1&v2&n3&n4&n5&v6&n7&n8&n9) | (n0&n1&v2&n3&v4&v6&v7&n8&n9) | (
+    v0&n1&v2&n3&n4&v6&n7&n8&v9) | (n0&v1&v2&n3&v5&n6&n7&n8&n9) | (
+    n0&v1&n2&n3&n4&n5&n6&n8&n9) | (n0&n1&v2&n3&n5&n6&n7&v8
+    &n9) | (n0&n1&v2&n3&n4&v5&n7&n8&v9) | (n0&n2&n3&n4&n5&v6
+    &v7&n8&n9) | (v0&v1&n2&n3&n4&n5&n6&n7&n8) | (n0&n1&v2&v3
+    &v4&n5&v7&n8&v9) | (v0&v2&n3&v4&n5&n6&v7&n8&n9) | (n0&n2&v3
+    &v4&n5&n6&v7&n8&v9) | (n0&v2&v3&n4&n5&v6&v7&n8&v9) | (v0&v1&v2
+    &n3&v4&n5&n6&n8&v9) | (v0&v1&v2&v3&n4&v5&v6&v8&v9) | (v0&n1&n2
+    &n3&n4&v5&n6&v8&n9) | (v0&n1&v2&v3&v4&v5&v6&v8&v9) | (n0&n1&n2
+    &v4&v5&v6&n7&v8&v9) | (n0&n1&v2&v3&v4&v5&v6&n7&n9) | (v0&n1&n2
+    &v4&v5&v6&v7&n8&v9) | (n0&n1&n3&v4&v5&v6&v7&v8&v9) | (v0&n1&v2
+    &v3&n4&n5&v6&v8&v9) | (n1&v2&v3&n4&n5&n6&n7&v8&n9) | (n0&v1
+    &v2&v3&v4&v5&n6&n7&v9) | (v0&v1&n2&n3&n4&n5&v6&n7&v8) | (n0
+    &v1&v3&n4&n5&v6&v7&n8&n9) | (v0&n2&n3&n4&v5&n6&n7&n8&n9) | (
+    v0&n1&v2&n3&v5&n6&n7&v8&v9) | (v0&n1&v2&v3&n5&n6&n7&v8&v9) | (
+    n0&n1&n2&v3&n4&v5&n6&n7&n8) | (v0&v1&v2&n3&n4&v6&v7&n8&v9) | (
+    n0&n1&v2&n4&v5&n6&n7&n8&v9) | (v0&v2&v3&v4&n5&v6&v7&n8&v9) | (
+    n0&n2&n3&v4&n5&n6&v7&v8&v9) | (n0&v1&v2&n3&v4&n5&n6&n7&v9) | (
+    n0&n1&n2&n3&n5&v6&v7&n8&v9) | (v0&n2&n4&v5&v6&v7&v8&v9) | (
+    v0&n1&v3&v4&v6&v7&n8&n9) | (v0&v1&v2&v3&v4&v6&n7&v9) | (v0&v1&n3
+    &n4&n6&v7&v8&v9) | (n0&v2&v4&n5&v6&n7&v8&n9) | (n1&n3&v4&v5
+    &n6&v7&n8&v9) | (v1&n2&v3&v4&n5&n6&n8&v9) | (v0&n1&v2&v3&v4&v5
+    &v6&v7);
 
-hex[2] <= (v0&v1&n2&n4&v5&n6&v7&v8) | (n0&n1&v2&v3&v5&v6&v7&n8) | (v0
-    &v1&n2&n3&v4&v5&n6&v7&v8) | (v0&v1&v2&n3&n4&v5&n6&n7&n8) | (
-    v0&v1&n2&n3&n4&n5&v6&n7&n8) | (n0&n1&v2&n3&n4&n5&v6&v7&n8) | (
-    n0&v1&n2&n3&n4&n5&n6&n7&n8) | (n0&v1&v2&v3&v4&n5&n6&n7&n8) | (
-    v0&n1&v2&n3&n4&n5&n6&n7&v8) | (n0&n1&v2&n3&n4&v5&v6&n7&n8) | (
-    n0&v1&v2&v3&n4&n5&n6&v7&n8) | (n0&v1&n2&n3&n4&n5&n6&v7&v8) | (
-    n0&v1&v2&n3&n4&n5&n6&n7&n8) | (v0&v1&v2&v3&v4&n6&v7&n8) | (
-    v0&n1&n2&v3&n4&v6&v7&n8) | (v0&n1&n2&n3&n5&n6&v7&n8) | (n0
-    &n1&n2&v3&v5&n6&v7&n8) | (v0&n1&v2&v3&v4&v5&n6&v8) | (v0&n1&n2
-    &n3&n5&v6&v7&v8) | (n0&v1&n2&n3&v4&n5&n6&n8) | (n0&n1&n2
-    &v3&n4&n6&n7&n8) | (n0&v1&v2&n3&v4&n5&v7&n8) | (n0&v1&n2&v3
-    &v4&n5&v6&n8) | (n0&v1&n2&n3&v4&v5&v6&v7) | (v0&n1&n3&n4&v5
-    &v6&n7&v8) | (n0&n2&n3&v4&v5&n6&n7&n8) | (v0&v1&v2&n4&n5&v6
-    &v7&v8) | (n0&n1&v2&n3&n4&n5&v7&v8) | (n0&v1&v2&v3&n4&n5&n7
-    &n8) | (n0&v1&v3&v4&v5&v6&n7&v8) | (n0&v1&v2&v3&v5&v6&n7&n8) | (
-    n0&v1&n2&v3&v5&v6&n7&v8) | (n0&n1&v2&v3&n4&v5&n7&v8) | (n1&v2
-    &n3&v4&v5&v6&n7&v8) | (n0&n1&v2&v4&v5&n6&n7&n8) | (n0&n1&n2
-    &v4&n5&v6&n7&n8) | (n0&n1&n2&n4&n5&v6&n7&v8) | (v0&v1&v2&n3
-    &v4&n5&n6&n7&n8) | (n0&n1&v2&v3&n4&n5&v6&n7&n8) | (v0&v1&n3
-    &n4&v5&v6&v7&n8) | (v0&n1&n2&v3&n4&v5&v6&n8) | (v0&n1&n2&v3
-    &v4&n5&v7&v8) | (v0&n1&n3&v4&v5&v6&v7&v8) | (v0&n1&n2&v3&n4&n5
-    &n6&v8) | (v0&n1&v2&v3&n4&n6&n7&n8) | (v1&v2&v3&v4&v5&v6&v7&n8) | (
-    v0&n1&n2&v4&n5&v6&v7&n8) | (n0&n1&n2&n3&v5&v6&v7&n8) | (n0
-    &v1&v2&v3&n5&n6&v7&v8) | (n1&n2&n3&n4&v5&n6&n7&n8) | (n0&n1
-    &v2&v3&v4&n5&v6&v7) | (n0&n2&v3&v4&v5&n6&n7&v8) | (v0&v1&n3&n4
-    &v5&n6&v7&v8) | (n0&v2&n3&n4&v5&n6&n7&v8) | (v0&v1&n2&n3&n5
-    &v6&v7&n8) | (v0&n1&v2&n3&v4&v5&n6&n8) | (v0&v1&n2&n3&v4&v5&v6
-    &n8) | (v0&v1&n2&v3&n4&n5&n7&n8) | (n0&v1&n2&v3&v4&n5&n6&v7) | (
-    v0&n1&v2&v4&n5&n6&v7&v8) | (n0&n1&n2&n3&n4&v5&n6&v8) | (n0
-    &n1&n2&v4&v5&v6&v7&n8) | (n0&n1&n2&v3&v4&n5&n6&n7) | (n0&v1
-    &v2&v3&n5&n6&n7&v8) | (v0&v1&n2&n3&n4&n6&v8) | (v0&v2&n3&n4
-    &n5&v7&n8) | (n1&n2&n3&n4&n6&v7&v8) | (v0&n1&n2&v3&n6&n7
-    &v8) | (n0&v2&n3&v4&n6&v7&v8) | (n0&v1&n2&v3&n5&v7&v8) | (v0&n1
-    &v2&v3&n5&n7&n8) | (v0&v1&n3&v4&n5&n7&v8) | (n0&v1&v2&n3&v5
-    &n6&v7) | (v0&v1&v2&n3&n5&v6&v8) | (n0&v2&v3&v4&v5&v6&v7) | (n1
-    &n2&n3&v4&n5&v6&v8) | (n1&n2&v3&v4&v5&v6&n7) | (v1&n2&v4&v5&n6
-    &n7&n8) | (v0&n1&v2&v4&v6&n7&n8) | (v0&v1&n2&v4&v6&n7&v8) | (
-    v0&n1&n2&v4&n5&n6&n7) | (n0&v1&v2&n4&v5&n6&v8) | (v1&v2&n3
-    &v4&n5&v6&n7) | (v1&v2&n4&n5&n6&n7&v8) | (v0&n2&v3&n4&v5&v6
-    &v7&n8) | (n0&n1&v3&v4&v5&n6&n7&v8) | (v1&n2&n3&v4&v5&v6&n7
-    &v8) | (v0&v2&v3&v4&v5&n6&v7) | (n0&v2&v3&n4&n5&n6&v8) | (v1&v2
-    &n3&v4&v6&n7&n8) | (v0&v1&v2&n3&v4&v7&v8) | (n0&v1&n2&n3&n4
-    &v6&n8) | (v0&v1&n3&v4&v6&n7&v8) | (v0&n1&n2&n5&n6&n7&v8);
+hex[2] <= (v0&n1&v2&v3&v4&n5&v6&n7&n8&n9) | (v0&n1&v2&n3&n4&n5&v6
+    &v7&n8&v9) | (v0&v1&v2&n3&n4&v5&v6&v7&v8&v9) | (v0&n1&v2&n3&v4
+    &v5&n6&n7&v8&n9) | (n0&n1&n2&v3&n4&n5&n6&v7&v8&n9) | (n0
+    &v1&v2&n3&n4&v5&v6&n7&v8&v9) | (n0&n1&n2&v3&n4&n5&v6&v7&n8
+    &n9) | (n0&v1&v2&v3&n4&n5&v6&n7&n8&n9) | (n0&v1&n2&v3&n4&n5
+    &n6&n7&n8&v9) | (n0&v1&v2&n3&n4&n5&n6&v7&n8&n9) | (n0&n1
+    &v2&n3&n4&n5&n6&n7&n8&n9) | (v0&v1&n2&n3&v4&n5&n6&v7&v8&v9) | (
+    n0&n1&v2&v3&v4&n5&n6&n7&v8&n9) | (v0&n1&v2&n3&v4&v5&v6&v7&n8
+    &v9) | (n0&n1&v2&v3&n4&n5&n6&n7&n8&n9) | (n0&n1&v2&n3&n4
+    &n5&n6&n7&v8&v9) | (v0&v2&v3&v4&v5&v6&n7&v8&n9) | (n0&v1&n2&n4
+    &v5&v6&v7&v8&v9) | (n0&v1&v2&v3&v4&v5&n7&v8&n9) | (v0&v1&v2&v3&v4
+    &v5&v6&n8&n9) | (n0&v1&n2&n3&n4&v5&n6&v8&n9) | (n0&n1&v2&v3
+    &n4&v5&n6&v8&n9) | (n0&n1&n2&n3&v4&v5&v6&v8&n9) | (v0&v1&n2
+    &v3&n4&n5&v6&n7&v9) | (v0&v2&v3&v4&n5&v6&v7&v8&n9) | (v0&n1&v2
+    &n3&v4&v6&v7&v8&n9) | (n0&n1&n2&n4&v5&v6&n7&n8&n9) | (v0&v1
+    &n3&n4&n5&v6&v7&v8&v9) | (n0&n1&v2&n3&n4&v5&n6&n7&n9) | (
+    n0&v1&n2&n3&n4&n6&v7&v8&v9) | (n0&n1&v2&n3&n4&v5&v6&v7&v8) | (
+    n0&n2&v3&n4&v5&v6&v7&n8&v9) | (v0&v1&n2&n3&n4&v6&n7&n8&v9) | (
+    n1&v2&n3&v4&v5&n6&v7&n8&n9) | (v0&v1&n3&v4&n5&v6&v7&n8&v9) | (
+    n0&v1&v2&v3&n5&n6&v7&v8&v9) | (n0&n1&v2&v3&v4&n5&v7&n8&n9) | (
+    n0&n1&n2&n3&v5&n6&v7&n8&n9) | (n0&n1&n2&v3&v4&n5&v6&n8&v9) | (
+    v0&n1&v2&n3&n4&v5&n6&n7&n8) | (v1&n2&n3&v4&n5&v6&n7&n8&v9) | (
+    n0&v1&v2&n3&n5&v6&n7&v8&v9) | (n0&n1&v2&n3&v4&v6&v7&n8&v9) | (
+    v1&v2&n3&n4&n5&n6&n7&n8&v9) | (v0&v1&v2&v3&v4&v5&n6&n7&n8&v9) | (
+    v0&v1&n2&n3&n4&v5&n6&n7&n8&v9) | (n0&n1&n2&v3&v4&n5&n6&v7
+    &n8&n9) | (v0&n1&v2&n3&v4&n5&v6&n7&n8&v9) | (v0&v1&n2&v3&v4
+    &v5&v6&n7&v9) | (v0&v1&n2&v3&v4&n6&v7&v8&v9) | (n0&v2&v3&v4&v5&v6
+    &v7&v8&n9) | (v0&v1&n2&v3&n4&n6&v7&n8&n9) | (n0&v1&n2&v3&n4
+    &v5&v6&n8&n9) | (n0&v1&v2&n4&n5&v6&v7&v8&n9) | (v0&v1&n2&v3&v4
+    &v5&v6&v7&n8) | (v1&n2&n3&v4&n5&v6&v7&v8&n9) | (n0&n1&n2&v3
+    &v4&v5&n6&v7&v8) | (n0&n1&n2&n3&n4&v6&v7&v8&n9) | (v0&n1&v3
+    &v4&n5&n6&v7&v8&v9) | (n1&v2&v3&v4&v5&n6&n7&v8&v9) | (v0&v1&v2
+    &n3&v4&n5&n7&v8&n9) | (v0&n1&n2&v3&n5&v6&v7&v8&v9) | (v0&v1&v2
+    &v3&n4&n5&v6&n7&v8) | (v0&n2&n3&n4&n5&n6&v7&v8&n9) | (n0&v1
+    &n2&n3&v4&v5&n6&v7&v8) | (n0&v1&v2&v3&n4&v5&n6&n8&n9) | (v0
+    &n1&n2&n3&v4&v6&n7&n8&n9) | (v0&v1&n3&v4&v5&n6&v7&n8&v9) | (
+    n0&v1&n2&v3&v4&n5&n7&n8&n9) | (v0&n1&v2&n3&n4&n5&n6&v7&n9) | (
+    n0&n1&n2&n3&v4&n5&v6&n7&n9) | (n0&v1&n2&n3&v4&n6&n7&v8&v9) | (
+    n0&v1&n2&n4&n5&v6&v7&n8&v9) | (n0&v1&n2&n3&n4&n5&n6&n7&v8) | (
+    n0&n1&n3&v4&v5&v6&n7&n8&v9) | (n0&v1&n2&v3&n4&v5&v6&n7&n9) | (
+    v0&v1&v2&v3&v4&v5&v7&v8&v9) | (v0&v1&n2&v3&v4&n5&v6&n7&n9) | (v0
+    &v1&n3&v4&v5&v6&v7&v8&v9) | (n0&n2&n3&n4&n5&v6&n7&n8&n9) | (
+    n0&v2&n3&n4&v5&v6&v7&n8&v9) | (v1&n2&v3&v4&v5&v6&v7&n8&n9) | (
+    v0&n1&n2&n4&v5&v6&v7&n8&v9) | (v0&v1&v2&n3&v4&v5&v6&n7&v8) | (
+    v0&v1&n3&n4&v5&n6&v7&n8&n9) | (v0&v2&v3&n4&v5&v6&v7&n8&n9) | (
+    n0&v1&n2&v3&v5&n6&n7&v8&v9) | (v0&v1&n2&n3&v4&n5&n6&n7&n9) | (
+    v0&v1&v2&n3&n4&v5&n6&n7&v8) | (v0&n2&n3&v4&v5&v6&n7&n8&n9) | (
+    v0&n1&v2&n3&v4&n5&v6&v7&n9) | (v0&v2&v3&v4&v5&n6&n7&n8&n9) | (
+    n0&v1&v2&n4&n5&v6&n7&v8&v9) | (n0&v1&n2&n3&v4&v6&v7&n8&n9) | (
+    n0&v1&n3&v4&v5&v6&v7&n8&v9) | (v0&v1&v2&n3&v4&n5&v6&n8&n9) | (
+    n0&n1&n2&n3&n4&n5&v6&n7&v9) | (n0&n1&n2&n3&v4&n5&n7&n8
+    &n9) | (n0&v1&v2&v3&n4&n5&n6&n8&v9) | (n0&v1&v2&n3&v4&n5&n6
+    &n8&n9) | (v0&n1&n2&v3&v5&v7&v8&n9) | (n1&n2&v3&v4&v6&v7&v8&n9) | (
+    n0&n1&v3&n4&v5&n7&v8&v9) | (n0&n1&v3&v4&v5&v6&v7&v8) | (v1&n2
+    &v3&n4&n5&n6&v8&n9) | (v0&n1&n2&v3&n5&v6&v8&n9) | (v1&n2&n3
+    &v4&n6&v7&v8&n9) | (v0&n2&n4&v5&n6&v7&n8&n9) | (v0&n1&v2&v3
+    &n4&v5&n8&n9) | (n0&v1&v3&n4&n5&n6&v8&n9) | (v0&v2&v3&n4&v5
+    &n6&v8&v9) | (v0&v1&v3&v4&n5&n6&n7&v8) | (v0&n1&v2&n3&n4&v6&n7
+    &n9) | (v1&n2&v3&v5&n6&v7&n8&n9) | (v0&v1&n3&n4&v6&v7&n8&n9) | (
+    v1&v2&n3&n4&n6&v7&v8&n9) | (v0&n1&n2&n3&v5&v6&n7&v8) | (n0
+    &n1&v2&v3&v4&v5&v6&v7) | (v0&n2&n4&n5&n6&n7&v8&v9) | (v0&n1&n2
+    &n3&n4&n6&v8&v9) | (n1&n2&v3&n4&n5&n6&v8&v9) | (v0&n1&n2&n3
+    &v6&n7&v8&v9) | (v0&v2&n3&n4&n5&n7&v8&n9) | (n1&n2&v3&v4&v5
+    &v6&n7&n8) | (n0&n1&v2&v3&n4&v6&n7&v8) | (n0&v1&n2&v3&v4&n6
+    &n8&n9) | (v0&n1&v2&v3&v4&n5&n6&v7) | (v0&v2&n3&n4&v5&v6&n8
+    &n9) | (n0&n2&n3&n4&v5&n6&v7&v9) | (n0&n2&v4&v5&v6&n7&n8&v9) | (
+    n0&v1&v2&n4&v5&n6&n8&v9) | (n0&n1&v2&n3&v4&v5&n6&v8) | (v0&n1
+    &v3&v4&n5&n6&v7&n8) | (n0&n2&n3&n4&n5&n7&v8&v9) | (n1&v2&n3
+    &v5&v6&n7&n8&n9) | (n0&v1&v2&n3&n4&n5&n7&v9) | (n0&n1&v2&v3
+    &n5&v6&n7&v9) | (n1&v2&n3&v4&n5&n6&v8&v9) | (v0&n1&v2&n3&v4
+    &n5&n6&n7) | (n1&n2&v3&n5&v6&n7&n8&v9) | (v0&n1&v2&v4&n5&n6
+    &n8&v9) | (n0&v2&v3&n4&v5&n6&v7&n8) | (n0&n2&n3&v4&v5&v6&v7
+    &n8) | (v0&n2&n3&v4&n5&v7&n8&v9) | (v1&v2&n3&v5&n6&v7&n8&v9) | (
+    n0&v2&n3&v5&v6&n7&n8&n9) | (v0&n1&n2&n3&n6&n7&n8&v9) | (
+    n0&v1&n2&n3&v5&n6&n7&n8) | (n0&n1&v2&v3&v4&n6&n7&n8) | (
+    v0&n1&n2&n3&n4&n5&n6&n8) | (v0&n1&v2&v3&n5&n6&v7&n8) | (
+    n1&n2&n3&n5&n6&v7&n8&v9) | (n0&v2&v3&n5&n6&n7&n8&v9) | (
+    n0&v1&n3&v4&n5&v6&v7&v8&n9) | (v0&v1&v2&n3&v4&v6&v7&n8&n9) | (
+    v1&v2&v3&n4&v5&n6&v7&n8&v9) | (v0&n1&v2&v3&v4&n6&v7&n8&v9) | (
+    v0&n2&v3&v5&v6&v7&v8&n9) | (v0&v1&v2&v5&n6&v7&v8&n9) | (n0&v1&v3
+    &v4&v5&v6&n7&v8) | (v0&n1&n2&v3&n6&n7&v8&n9) | (v0&v1&v2&v3&n4
+    &n6&v8&v9) | (v0&n1&v2&n3&n4&n5&v8&n9) | (n0&v2&v3&n4&v5&v7
+    &n8&n9) | (n0&n1&v3&v4&n5&n6&n7&v9) | (v0&n1&n2&v3&n4&n6
+    &n7&n8) | (v0&n1&n2&v3&n4&n5&n7&n8) | (v0&n1&n2&v4&v5&n6
+    &n7&v9) | (v1&v2&n3&n4&v5&v6&v7&n9) | (n0&v1&v2&v3&n4&v5&v8&v9) | (
+    v0&v1&n2&v4&n5&v6&n7&v8) | (n0&v1&v2&n4&v5&v7&n8&v9) | (n0&n1
+    &v2&n3&n4&n5&v7&n9) | (v0&v1&v2&n3&v4&v5&n6&n8) | (n1&n2&n3
+    &v4&v5&n6&n7&n8) | (n0&v1&n2&n3&n6&n7&n8&v9) | (v0&n1&n2
+    &v3&v4&v5&n7&v8);
 
-hex[1]<= (v0&n1&v2&n3&v4&n6&n7&n8) | (n0&v1&n2&n3&n4&v5&v6&v8) | (
-    v0&v1&n2&n3&v4&v5&n6&v7&v8) | (v0&v1&v2&n3&n4&v5&n6&n7&n8) | (
-    v0&v1&n2&n3&n4&n5&v6&n7&n8) | (n0&n1&v2&n3&n4&n5&v6&v7&n8) | (
-    n0&v1&n2&n3&n4&n5&n6&n7&n8) | (n0&v1&v2&v3&v4&n5&n6&n7&n8) | (
-    v0&n1&v2&n3&n4&n5&n6&n7&v8) | (n0&n1&v2&n3&n4&v5&v6&n7&n8) | (
-    v0&v1&n3&v4&n5&v6&v7&n8) | (n0&n1&n2&v3&n4&n6&v7&n8) | (v0
-    &v1&n2&v3&v5&n6&n7&n8) | (v0&n1&n2&n3&n5&v6&v7&n8) | (n0&v1
-    &v3&n4&v5&n6&v7&v8) | (v0&n1&v2&v3&v4&v6&v7&v8) | (v0&n1&v2&n3
-    &v4&n5&n6&n8) | (n0&v1&n2&v3&v4&v5&n6&v7) | (v0&v2&v3&n4&n5
-    &n6&n7&n8) | (n1&n2&v3&n4&v5&v6&v7&v8) | (n0&n1&n2&n3&v4&n5
-    &n6&n8) | (v0&n1&v2&n4&v5&v6&v7&n8) | (v0&v1&n2&v3&v4&n5&v6&n7) | (
-    n0&v1&v3&n4&n5&n6&n7&v8) | (n0&v1&n3&n4&v5&v6&n7&n8) | (n0
-    &v1&v2&v4&n5&n6&v7&n8) | (n0&n1&n2&n3&n5&v6&v7&v8) | (v0&n1
-    &n2&n3&v4&n5&v6&n7) | (n1&v2&v3&v4&n5&n6&n7&v8) | (v0&n1&v2
-    &n4&n5&v6&v7&v8) | (v0&v1&v2&n3&v4&n5&n6&n7&n8) | (n0&n1&v2
-    &v3&n4&n5&v6&n7&n8) | (v0&v1&n3&n4&v5&v6&v7&n8) | (v0&n1&n2
-    &v3&n4&v5&v6&n8) | (v0&n1&n2&v3&v4&n5&v7&v8) | (v0&n1&n3&v4&v5
-    &v6&v7&v8) | (v0&n1&n2&v3&n4&n5&n6&v8) | (v0&n1&v2&v3&n4&n6
-    &n7&n8) | (v1&v2&v3&v4&v5&v6&v7&n8) | (v0&n1&n2&v4&n5&v6&v7&n8) | (
-    n0&n1&n2&n3&v5&v6&v7&n8) | (n0&v1&v2&v3&n5&n6&v7&v8) | (n1
-    &n2&n3&n4&v5&n6&n7&n8) | (n0&n1&v2&v3&v4&n5&v6&v7) | (n0&n2
-    &v3&v4&v5&n6&n7&v8) | (v0&n1&n3&v4&v5&n6&v7&v8) | (v0&v1&v2&n3
-    &n4&v5&n6&v7) | (n0&v2&n3&n4&v5&n6&n7&v8) | (n0&v1&v3&n4&n5
-    &v6&v7&v8) | (n0&n1&v3&v4&n5&n6&n7&n8) | (n0&v2&n3&n4&n5&n6
-    &v7&v8) | (n0&n1&n2&v3&n4&v5&n7&n8) | (n0&v1&v2&v3&n4&v5&n7
-    &n8) | (n0&v1&v2&n3&v4&v5&n6&n7) | (v1&v2&n3&n4&n5&v6&n7&v8) | (
-    v0&v3&v4&v5&n6&v7&n8) | (n1&n3&n4&v5&n6&v7&n8) | (v0&n2&v3&n4
-    &v5&v7&v8) | (n0&v1&v3&n4&v6&v7&n8) | (v0&v1&n2&n3&v4&n5&v7) | (
-    n0&n1&n3&v5&n6&v7&n8) | (v0&v1&v2&n3&v5&v6&v7) | (n0&n2&n3
-    &n4&v5&n6&n8) | (n1&v2&v3&n4&n5&v7&v8) | (v0&n1&n2&n4&n5&n6
-    &v7) | (v1&v2&v3&n4&n5&v6&v7) | (v0&v1&v3&n5&v6&n7&v8) | (v0&v2
-    &v3&v5&v6&n7&v8) | (n0&n2&v4&n5&v6&v7&n8) | (n0&n1&n3&n4&n5
-    &n6&n7) | (n0&n1&n2&n3&v4&n7&v8) | (n0&v1&n2&n3&n4&v5&n7) | (
-    v0&n1&n2&n4&v6&n7&v8) | (n1&n2&v4&v5&n6&n7&v8) | (n0&n1&v2
-    &v4&n5&v7&v8) | (v1&v2&n4&v5&n6&n7&v8) | (n0&n1&v2&v4&v6&n7&n8) | (
-    v1&v2&v4&n5&v6&n7&v8) | (n1&v2&n4&v5&v6&n7&v8) | (v0&n2&v3&n4
-    &v5&v6&v7&n8) | (n0&n1&v3&v4&v5&n6&n7&v8) | (v1&n2&n3&v4&v5&v6
-    &n7&v8) | (v0&v2&v3&v4&v5&n6&v7) | (n0&v2&v3&n4&n5&n6&v8) | (
-    v1&v2&n3&v4&v6&n7&n8) | (v0&v1&n2&v4&v5&n6&n8) | (n1&n2&n3
-    &v4&v5&v6&n8) | (v0&n2&v4&n5&n6&v7&v8) | (v0&v1&v2&v3&v4&v5) | (
-    v2&n3&v4&v5&v6&n8);
+hex[1] <= (v0&v1&v2&n3&n4&v5&v6&v7&v8&v9) | (v0&n1&v2&n3&v4&v5&n6&n7
+    &v8&n9) | (n0&n1&n2&v3&n4&n5&n6&v7&v8&n9) | (n0&v1&v2&n3&n4
+    &v5&v6&n7&v8&v9) | (n0&n1&n2&v3&n4&n5&v6&v7&n8&n9) | (n0&v1
+    &v2&v3&n4&n5&v6&n7&n8&n9) | (n0&v1&n2&v3&v4&v5&v6&v7&v8&v9) | (
+    n0&v1&n2&v3&n4&n5&n6&n7&n8&v9) | (n0&v1&v2&n3&n4&n5&n6&v7
+    &n8&n9) | (n0&n1&v2&n3&n4&n5&n6&n7&n8&n9) | (v0&n1&v2&v3
+    &v4&v5&v6&n7&n8&v9) | (v0&v1&n2&v3&n4&v6&n7&v8&v9) | (v0&v1&n2
+    &v3&n4&n5&v6&n7&n9) | (n0&v1&n2&v3&n4&v5&n6&n7&n9) | (v0&v1
+    &n2&n4&v5&v6&v7&n8&v9) | (v0&n1&v3&n4&v5&n6&n7&n8&n9) | (v0
+    &v1&v2&n3&n4&v5&n6&n7&n9) | (v0&v1&v2&v4&n5&v6&v7&v8&v9) | (v0
+    &v2&v3&n4&v5&n6&n7&v8&v9) | (v0&n1&v2&n3&v4&v5&v7&v8&v9) | (n0
+    &n1&v2&v3&v5&n6&n7&v8&n9) | (n0&n1&n2&n3&n4&v5&n6&n7&n9) | (
+    v0&n1&v2&n3&n4&v5&n6&v7&v8) | (n0&n1&v3&v4&v5&n6&n7&n8&n9) | (
+    v0&n1&n2&n3&n4&n5&v6&v8&v9) | (n0&n1&n2&v3&v4&v5&n7&n8&v9) | (
+    n1&n2&n3&v4&n5&v6&v7&v8&v9) | (n0&v1&n2&v3&n5&n6&v7&v8&v9) | (
+    n0&n1&v2&v4&n5&v6&n7&v8&v9) | (n0&n1&n2&n3&n4&n6&v7&v8&v9) | (
+    n0&n1&v2&n3&v4&v5&v6&n7&v8) | (v0&v1&v2&n3&v4&n6&n7&n8&n9) | (
+    n0&n2&n3&v4&n5&n6&n7&v8&n9) | (n0&n1&v2&n4&n5&v6&v7&n8&n9) | (
+    v0&n1&n2&n3&n5&n6&n7&v8&v9) | (n0&v1&v2&n3&v4&v6&n7&n8&n9) | (
+    n0&n1&n2&n3&v5&n6&n7&n8&n9) | (n0&n1&n2&v3&n4&n5&v6&n8
+    &v9) | (n0&n1&v2&n3&n4&n5&v6&v7&v9) | (n0&v1&n2&n3&n4&n6&v7
+    &n8&v9) | (n0&v1&v2&n3&v4&v5&n6&v7&n8) | (v0&v1&v2&n3&n5&v6&n7
+    &n8&v9) | (n0&v1&n2&n3&v4&n5&n6&n8&v9) | (v0&v1&v2&v3&v4&v5&n6
+    &n7&n8&v9) | (v0&v1&n2&n3&n4&v5&n6&n7&n8&v9) | (n0&n1&n2
+    &v3&v4&n5&n6&v7&n8&n9) | (v0&n1&v2&n3&v4&n5&v6&n7&n8&v9) | (
+    v0&v1&n2&v3&v4&v5&v6&n7&v9) | (v0&v1&n2&v3&v4&n6&v7&v8&v9) | (n0
+    &v2&v3&v4&v5&v6&v7&v8&n9) | (v0&v1&n2&v3&n4&n6&v7&n8&n9) | (n0
+    &v1&n2&v3&n4&v5&v6&n8&n9) | (n0&v1&v2&n4&n5&v6&v7&v8&n9) | (
+    v0&v1&n2&v3&v4&v5&v6&v7&n8) | (v1&n2&n3&v4&n5&v6&v7&v8&n9) | (
+    n0&n1&n2&v3&v4&v5&n6&v7&v8) | (n0&n1&n2&n3&n4&v6&v7&v8&n9) | (
+    v0&n1&v3&v4&n5&n6&v7&v8&v9) | (n1&v2&v3&v4&v5&n6&n7&v8&v9) | (
+    v0&v1&v2&n3&v4&n5&n7&v8&n9) | (v0&n1&n2&v3&n5&v6&v7&v8&v9) | (
+    v0&v1&v2&v3&n4&n5&v6&n7&v8) | (v0&n2&n3&n4&n5&n6&v7&v8&n9) | (
+    n0&v1&n2&n3&v4&v5&n6&v7&v8) | (n0&v1&v2&v3&n4&v5&n6&n8&n9) | (
+    v0&n1&n2&n3&v4&v6&n7&n8&n9) | (v0&v1&n3&v4&v5&n6&v7&n8&v9) | (
+    n0&v1&n2&v3&v4&n5&n7&n8&n9) | (v0&n1&v2&n3&n4&n5&n6&v7&n9) | (
+    n0&n1&n2&n3&v4&n5&v6&n7&n9) | (n0&v1&n2&n3&v4&n6&n7&v8&v9) | (
+    n0&v1&n2&n4&n5&v6&v7&n8&v9) | (n0&v1&n2&n3&n4&n5&n6&n7&v8) | (
+    n0&n1&n3&v4&v5&v6&n7&n8&v9) | (n0&v1&n3&v4&v5&v6&n7&v8&n9) | (
+    v0&v1&n2&n3&v5&n6&n7&v8&n9) | (v0&n1&n3&n4&v5&v6&n7&v8&v9) | (
+    n0&n2&n3&n4&n5&v6&n7&n8&n9) | (n0&v2&n3&n4&v5&v6&v7&n8&v9) | (
+    v0&n1&n2&v3&v5&v6&n7&n8&n9) | (v1&n2&n3&n4&n5&n6&v7&v8&n9) | (
+    n0&n1&v2&v3&v4&n5&v6&v7&n9) | (v1&n2&v3&v4&v5&n6&n7&n8&v9) | (
+    n0&n1&v3&n4&n5&n6&n7&v8&v9) | (v0&v1&n2&v3&v4&n5&v6&v7&n8) | (
+    n0&v1&v2&v3&n4&n5&v6&n7&v8) | (v0&v1&v2&n3&n4&v5&v6&n7&n8) | (
+    v0&n1&v2&v3&v4&n5&n6&n8&n9) | (n0&v1&n2&v4&n5&v6&v7&n8&v9) | (
+    n0&n1&v2&v3&n4&v5&v6&n7&n8) | (v0&n1&n2&n3&v4&n5&v7&n8&v9) | (
+    n0&n1&v2&v3&v4&n5&v6&n7&n8) | (n0&v2&v3&n4&n5&n6&v7&n8&v9) | (
+    v0&v2&n3&n4&n5&n6&v7&n8&v9) | (v1&v2&n4&v5&n6&v7&v8&n9) | (
+    v0&n1&n2&n3&v4&v5&v7&n9) | (v1&n2&v4&v5&n6&v7&v8&v9) | (n0&v1
+    &n2&n4&v5&v6&v8&v9) | (v0&v1&v2&v3&v5&n6&v8&n9) | (n0&n1&n2&n4
+    &v6&n7&v8&n9) | (v0&n2&n3&v4&v5&v6&v8&n9) | (v1&n2&n3&n4&v5
+    &n6&v7&n9) | (v1&n2&v3&n5&v6&v7&v8&n9) | (v0&n2&v3&v4&v5&n6&v7
+    &v9) | (v0&v2&v3&v5&n6&v7&v8&n9) | (v0&n1&n2&v3&v4&n5&v7&v8) | (
+    n1&v2&v4&n5&v6&v7&v8&n9) | (v0&n3&v4&v5&v6&n7&v8&v9) | (v0&v1&v2
+    &v3&n4&n6&v7&v8) | (v0&n1&n3&v4&v5&v7&n8&n9) | (n0&n2&n4&n5
+    &v6&n7&v8&n9) | (v0&n1&n2&n4&v5&v6&n7&n8) | (n0&v1&v2&v3&n4
+    &v6&v7&v8) | (n0&n1&n3&v5&n6&v7&v8&n9) | (n0&n1&n2&v3&v5&n6
+    &v8&v9) | (n0&n1&n2&v3&v5&v7&n8&n9) | (v0&v2&v3&n5&v6&n7&v8&n9) | (
+    v0&v1&v3&v4&n5&n6&n8&n9) | (v1&v3&v4&n5&n6&n7&n8&n9) | (n0
+    &v1&v3&v4&v6&v7&n8&v9) | (n1&v2&n3&n4&n5&v6&n7&n9) | (n1&n3
+    &n4&v5&v6&v7&n8&v9) | (n0&v1&n3&v4&n5&v6&v8&v9) | (n0&v1&v2&n3
+    &n4&v5&n6&v8) | (v0&v1&n2&n3&n6&v7&n8&n9) | (v0&n1&n2&n3&n4
+    &v7&n8&v9) | (n0&n2&v3&v4&n5&n6&v8&v9) | (v0&v1&v3&n4&n5&n6
+    &n7&n8) | (v0&v2&n3&n4&n5&n7&v8&v9) | (v0&n1&v4&n5&n6&n7&n8
+    &v9) | (v0&n1&n3&v4&v5&n6&n7&n8) | (n0&n1&v2&v4&n5&n6&v7&v8) | (
+    v0&v1&v2&n3&v4&n5&n6&v8) | (v1&n2&n3&v5&v6&n7&n8&v9) | (n0&n1
+    &n2&n3&n4&v5&n8&v9) | (v0&n1&n2&v3&n4&n5&n6&n8) | (n2&v3
+    &v4&n5&v6&v7&n8&v9) | (v0&v2&v3&n4&n5&v7&n8&v9) | (n0&v1&v2&v4
+    &n6&v7&n8&v9) | (n0&v2&v3&v4&n5&n6&v7&v8) | (n0&n1&n2&n4&n5
+    &n6&n7&n8) | (n1&v2&v4&n5&n6&n7&n8&v9) | (n0&v2&v3&v5&n6&v7
+    &n8&v9) | (n0&v2&v3&n5&v6&n7&n8&v9) | (n0&n1&v2&n3&n4&n5&v6
+    &n8) | (n0&v1&n3&v4&n5&v6&v7&v8&n9) | (v0&v1&v2&n3&v4&v6&v7&n8
+    &n9) | (v1&v2&v3&n4&v5&n6&v7&n8&v9) | (v0&n1&v2&v3&v4&n6&v7&n8
+    &v9) | (v0&n2&v3&v5&v6&v7&v8&n9) | (v0&v1&v2&v5&n6&v7&v8&n9) | (
+    n0&v1&v3&v4&v5&v6&n7&v8) | (v0&n1&n2&v3&n6&n7&v8&n9) | (v0&v1
+    &v2&v3&n4&n6&v8&v9) | (v0&n1&v2&n3&n4&n5&v8&n9) | (n0&v2&v3
+    &n4&v5&v7&n8&n9) | (n0&n1&v3&v4&n5&n6&n7&v9) | (v0&n1&n2&v3
+    &n4&n6&n7&n8) | (v0&n1&n2&v3&n4&n5&n7&n8) | (n0&n2&n3&n4
+    &v5&v6&v7&n9) | (n0&v1&v2&n3&v5&v6&n7&n9) | (v0&v1&n3&n4&n5
+    &n6&n7&v8) | (n0&v1&n3&v5&n6&n7&v8&v9) | (n0&v1&v2&v3&v4&v5&v6
+    &n8) | (n2&n3&v4&n5&v6&v7&n8&n9) | (n0&v3&n4&v5&v6&v7&n9) | (
+    v0&v3&v4&n5&n7&v8&n9) | (v1&v2&v3&v4&v5&v6&v7) | (v0&n1&n5&v6&n7
+    &n8&n9) | (v0&n2&n3&n4&v5&v7&n8) | (v0&n1&n2&v3&v4&v5&n7&v8);
 
-hex[0] <= (v0&n1&v2&v3&n4&n5&n6&v7&n8) | (v0&v1&n2&n3&v4&v5&v6&v7&v8) | (
-    v0&v1&n2&n3&n4&v5&n6&n7&n8) | (n0&n1&n2&v3&v4&v5&n6&n7&n8) | (
-    v0&n1&v2&n3&n4&v5&n6&n7&v8) | (n0&v1&v2&n3&n4&v5&n6&n7&n8) | (
-    n0&v1&v2&v3&n4&n5&n6&v7&n8) | (n0&v1&n2&n3&n4&n5&n6&v7&v8) | (
-    n0&v1&v2&n3&n4&n5&n6&n7&n8) | (v0&v2&v3&n4&v5&n6&v7&v8) | (
-    v0&v1&v2&v3&v4&n5&v6&n8) | (v0&n1&v2&v3&v4&v5&v6&v7) | (v0&n1&v2
-    &n3&n5&v6&v7&n8) | (v0&n1&v2&v3&n4&n5&v6&v8) | (v1&n2&n3&v4
-    &n5&n6&n7&n8) | (v0&v2&v3&n4&n5&v6&n7&n8) | (v0&n1&v2&v4&v5
-    &v6&v7&n8) | (n0&n1&v2&n3&v4&v5&v7&v8) | (n0&v1&n2&v3&n5&v6&n7
-    &n8) | (v0&n1&v2&n4&n5&n6&n7&n8) | (n0&n1&n3&n4&n5&v6&n7
-    &v8) | (n0&v1&n2&v4&v5&v6&n7&n8) | (n0&n1&v2&v4&v5&v6&n7&n8) | (
-    n0&v1&n2&v4&n5&v6&n7&v8) | (v0&v1&v2&n3&v4&n5&n6&n7&n8) | (
-    n0&n1&v2&v3&n4&n5&v6&n7&n8) | (v0&v1&n2&v3&n4&n5&n6&v8) | (
-    n0&v1&n3&n4&n5&n6&v7&n8) | (v0&n2&v3&n4&n5&v6&v7&v8) | (n0
-    &n1&v3&v4&v5&n6&v7&v8) | (n0&v1&v2&v3&v4&v5&n6&n8) | (n0&n1&n2
-    &v3&v5&n6&v7&v8) | (n0&n2&v3&v4&v5&v6&v7&v8) | (v0&v2&n3&n4&v5
-    &v6&n7&n8) | (n0&n1&n2&n3&v5&v6&v7&v8) | (v0&v1&v2&n3&n4&v5
-    &v6&n7) | (n0&v1&n3&v4&n5&n6&n7&v8) | (n0&n1&v2&n3&v4&n5&n6
-    &n7) | (v0&n1&n3&v4&v5&n6&v7&v8) | (n0&n1&n2&n4&v5&v6&n7&v8) | (
-    v0&v1&v2&n3&n4&v5&n6&v7) | (v0&v1&n3&n4&v5&n6&v7&v8) | (v0&v1
-    &n2&n3&n5&v6&v7&n8) | (v0&n1&v2&n3&v4&v5&n6&n8) | (v0&v1&n2
-    &n3&v4&v5&v6&n8) | (n0&v1&v3&n4&n5&v6&v7&v8) | (v0&v1&n2&v3&n4
-    &n5&n7&n8) | (n0&v1&n2&v3&v4&n5&n6&v7) | (n0&n1&v3&v4&n5&n6
-    &n7&n8) | (n0&v2&n3&n4&n5&n6&v7&v8) | (n0&n1&n2&v3&n4&v5
-    &n7&n8) | (n0&v1&v2&v3&n4&v5&n7&n8) | (v0&n1&v2&v4&n5&n6&v7
-    &v8) | (n0&n1&n2&n3&n4&v5&n6&v8) | (n0&v1&v2&n3&v4&v5&n6&n7) | (
-    n0&n1&n2&v4&v5&v6&v7&n8) | (n0&n1&n2&v3&v4&n5&n6&n7) | (v1
-    &v2&n3&n4&n5&v6&n7&v8) | (n0&v1&v2&v3&n5&n6&n7&v8) | (v0&n2
-    &v3&v4&v5&n6&v7) | (v0&n1&n2&v3&n4&v5&n8) | (v0&v1&v2&v3&n4&v7
-    &v8) | (v1&v2&v3&v4&n6&v7&v8) | (v0&v1&n2&n5&n6&v7&n8) | (v0&n1
-    &v2&v3&v5&v6&n8) | (v0&n1&v2&n3&v4&n6&v8) | (v0&v1&n2&v3&v5&v6
-    &v8) | (n0&n2&v3&v4&n5&n6&n8) | (n0&n1&v3&n4&n6&n7&n8) | (
-    n0&n1&n2&v3&n4&v6&v7) | (v0&v3&n4&v5&v6&n7&v8) | (n0&n1&n2
-    &n3&n5&n6&n8) | (n1&n2&n3&n4&n5&v6&n8) | (n0&v1&n2&n3&v5
-    &v7&v8) | (v0&v2&v3&v4&n5&n6&n7) | (n0&v2&v3&n4&v5&v6&v7) | (v1
-    &n2&v3&n4&v5&n7&v8) | (v2&n3&v4&n5&v6&v7&v8) | (v1&v2&v3&n4&v5
-    &n6&n7) | (n0&v3&v4&n5&v6&n7&n8) | (n0&v1&n2&n4&v5&n6&v7) | (
-    v0&v2&n3&n4&n5&n7&v8) | (v0&v1&n2&n4&n5&v6&v8) | (v0&v1&v2&v4
-    &v5&n7&n8) | (n0&v1&n4&v5&v6&v7&v8) | (v0&v1&n2&n4&v5&v6&n7) | (
-    v0&n1&n2&v4&v5&v6&n7) | (n0&v1&v2&n5&v6&v7&v8) | (n0&n1&n2&v5
-    &n6&n7&v8) | (v1&v2&v4&v5&v6&n7&v8) | (n0&n1&v2&n4&n5&n7&v8) | (
-    v0&n2&v3&n4&v5&v6&v7&n8) | (n0&n1&v3&v4&v5&n6&n7&v8) | (v1&n2
-    &n3&v4&v5&v6&n7&v8) | (v0&v1&n2&v4&v5&n6&n8) | (v0&v1&v2&n3&v4
-    &v7&v8) | (n1&n2&n3&v4&v5&v6&n8) | (v0&n2&v4&n5&n6&v7&v8) | (
-    n0&v1&n2&n3&n4&v6&n8) | (v0&v1&n3&v4&v6&n7&v8) | (v0&n1&n2
-    &n5&n6&n7&v8) | (v0&v1&v3&v4&n6&v8) | (v0&v1&n2&v3&v4&v7) | (n2
-    &n3&v5&n6&v7&n8) | (n1&n2&n3&v5&v7&n8) | (v1&v2&n3&v4&n5&v7);
+hex[0] <= (v0&v1&n2&v3&v4&v5&v6&v7&v8&v9) | (v0&n1&n2&v3&n4&v5&n6&n7
+    &v8&v9) | (n0&v1&n2&v3&v4&n5&n6&n7&v8&n9) | (v0&v1&v2&n3&v4&n5
+    &v6&v7&v8&n9) | (v0&v1&n2&n3&v4&n5&v6&v7&v8&v9) | (v0&v1&v2&v3&v4
+    &n5&n6&v7&v8&v9) | (n0&v1&v2&n3&n4&v5&v6&v7&v8&v9) | (n0&n1&n2
+    &n3&v4&n5&v6&v7&v8&n9) | (v0&v1&n2&n3&v4&n5&v6&n7&n8&n9) | (
+    n0&n1&n2&n3&v4&v5&v6&n7&n8&n9) | (n0&v1&n2&n3&n4&v5&v6&v7
+    &n8&v9) | (n0&v1&n2&v3&n4&n5&v6&n7&n8&v9) | (n0&n1&v2&v3&n4
+    &n5&v6&n7&n8&n9) | (v0&n1&v2&n3&n4&n5&n6&n7&n8&n9) | (n0
+    &v1&n2&v3&v4&v5&v6&v7&v8&v9) | (v0&n1&v2&v3&v4&v5&v6&n7&n8&v9) | (
+    v0&v1&n2&n3&v4&n5&n6&v7&v8&v9) | (n0&n1&v2&v3&v4&n5&n6&n7&v8
+    &n9) | (v0&n1&v2&n3&v4&v5&v6&v7&n8&v9) | (n0&n1&v2&v3&n4&n5
+    &n6&n7&n8&n9) | (n0&n1&v2&n3&n4&n5&n6&n7&v8&v9) | (v0&n1
+    &v3&n4&v5&n6&v7&v8&n9) | (v0&v1&n2&v3&n4&n5&v7&v8&n9) | (v0&v1
+    &v2&v3&v4&n5&v7&v8&n9) | (n0&v1&n2&v3&n4&n6&v7&v8&n9) | (n0
+    &n1&n2&v3&n4&v5&v6&v8&v9) | (n0&v1&v3&v4&n5&v6&n7&v8&v9) | (n0
+    &n1&n2&v3&v5&v6&v7&n8&n9) | (v0&n2&v3&n4&n5&v6&v7&n8&n9) | (
+    n1&n2&n3&v4&n5&n6&v7&v8&n9) | (n0&v1&n2&v3&v4&n5&n6&v7&v9) | (
+    n0&v1&v3&v4&n5&n6&v7&n8&n9) | (v0&n1&n3&n4&n5&v6&n7&n8&n9) | (
+    v0&v1&v2&v3&v4&n5&n7&n8&v9) | (v0&v2&v3&n4&n5&n6&v7&n8&n9) | (
+    n0&n1&v2&n3&v5&v6&v7&n8&n9) | (v0&n1&n2&n3&n5&n6&v7&n8&n9) | (
+    n0&n1&n2&n4&n5&n6&v7&n8&v9) | (n0&v2&n3&n4&v5&n6&n7&n8
+    &n9) | (n0&n1&v3&v4&n5&n6&n7&n8&v9) | (n1&v2&n3&v4&n5&n6
+    &v7&n8&n9) | (v0&n2&n3&v4&n5&n6&n7&n8&v9) | (n0&n1&v2&n3
+    &v5&n6&v7&n8&v9) | (v0&v1&v2&v3&v4&v5&n6&n7&n8&v9) | (v0&v1&n2
+    &n3&n4&v5&n6&n7&n8&v9) | (n0&n1&n2&v3&v4&n5&n6&v7&n8&n9) | (
+    v0&n1&v2&n3&v4&n5&v6&n7&n8&v9) | (v0&v1&v2&v3&n4&v5&v6&v8&v9) | (
+    v0&n1&n2&n3&n4&v5&n6&v8&n9) | (v0&n1&v2&v3&v4&v5&v6&v8&v9) | (
+    n0&n1&n2&v4&v5&v6&n7&v8&v9) | (n0&n1&v2&v3&v4&v5&v6&n7&n9) | (
+    v0&n1&n2&v4&v5&v6&v7&n8&v9) | (n0&n1&n3&v4&v5&v6&v7&v8&v9) | (
+    v0&n1&v2&v3&n4&n5&v6&v8&v9) | (n1&v2&v3&n4&n5&n6&n7&v8&n9) | (
+    n0&v1&v2&v3&v4&v5&n6&n7&v9) | (v0&v1&n2&n3&n4&n5&v6&n7&v8) | (
+    n0&v1&v3&n4&n5&v6&v7&n8&n9) | (v0&n2&n3&n4&v5&n6&n7&n8&n9) | (
+    v0&n1&v2&n3&v5&n6&n7&v8&v9) | (v0&n1&v2&v3&n5&n6&n7&v8&v9) | (
+    n0&n1&n2&v3&n4&v5&n6&n7&n8) | (v0&v1&v2&n3&n4&v6&v7&n8&v9) | (
+    n0&n1&v2&n4&v5&n6&n7&n8&v9) | (v0&v2&v3&v4&n5&v6&v7&n8&v9) | (
+    n0&n2&n3&v4&n5&n6&v7&v8&v9) | (n0&v1&v2&n3&v4&n5&n6&n7&v9) | (
+    n0&n1&n2&n3&n5&v6&v7&n8&v9) | (n0&v1&n2&v3&n4&v5&v6&n7&n9) | (
+    v0&v1&v2&v3&v4&v5&v7&v8&v9) | (n0&v1&n3&v4&v5&v6&n7&v8&n9) | (v0
+    &v1&n2&n3&v5&n6&n7&v8&n9) | (v0&n1&n3&n4&v5&v6&n7&v8&v9) | (
+    v0&v1&n2&v3&v4&n5&v6&n7&n9) | (v0&v1&n3&v4&v5&v6&v7&v8&v9) | (
+    v1&n2&v3&v4&v5&v6&v7&n8&n9) | (v0&n1&n2&v3&v5&v6&n7&n8&n9) | (
+    v1&n2&n3&n4&n5&n6&v7&v8&n9) | (v0&n1&n2&n4&v5&v6&v7&n8&v9) | (
+    v0&v1&v2&n3&v4&v5&v6&n7&v8) | (v0&v1&n3&n4&v5&n6&v7&n8&n9) | (
+    v0&v2&v3&n4&v5&v6&v7&n8&n9) | (n0&v1&n2&v3&v5&n6&n7&v8&v9) | (
+    n0&n1&v2&v3&v4&n5&v6&v7&n9) | (v1&n2&v3&v4&v5&n6&n7&n8&v9) | (
+    v0&v1&n2&n3&v4&n5&n6&n7&n9) | (v0&v1&v2&n3&n4&v5&n6&n7&v8) | (
+    n0&n1&v3&n4&n5&n6&n7&v8&v9) | (v0&v1&n2&v3&v4&n5&v6&v7&n8) | (
+    n0&v1&v2&v3&n4&n5&v6&n7&v8) | (v0&n2&n3&v4&v5&v6&n7&n8&n9) | (
+    v0&n1&v2&n3&v4&n5&v6&v7&n9) | (v0&v2&v3&v4&v5&n6&n7&n8&n9) | (
+    n0&v1&v2&n4&n5&v6&n7&v8&v9) | (v0&v1&v2&n3&n4&v5&v6&n7&n8) | (
+    v0&n1&v2&v3&v4&n5&n6&n8&n9) | (n0&v1&n2&v4&n5&v6&v7&n8&v9) | (
+    n0&n1&v2&v3&n4&v5&v6&n7&n8) | (n0&v1&n2&n3&v4&v6&v7&n8&n9) | (
+    n0&v1&n3&v4&v5&v6&v7&n8&v9) | (v0&n1&n2&n3&v4&n5&v7&n8&v9) | (
+    v0&v1&v2&n3&v4&n5&v6&n8&n9) | (n0&n1&n2&n3&n4&n5&v6&n7&v9) | (
+    n0&n1&n2&n3&v4&n5&n7&n8&n9) | (n0&n1&v2&v3&v4&n5&v6&n7&n8) | (
+    n0&v1&v2&v3&n4&n5&n6&n8&v9) | (n0&v2&v3&n4&n5&n6&v7&n8&v9) | (
+    v0&v2&n3&n4&n5&n6&v7&n8&v9) | (n0&v1&v2&n3&v4&n5&n6&n8&n9) | (
+    v1&n2&n4&v5&v6&v7&v8&n9) | (v0&v1&v2&v5&v6&n7&v8&n9) | (v0&v1&n2
+    &v3&v5&n7&v8&v9) | (v0&v1&v2&v3&n4&v5&n7&v9) | (n0&v1&n2&v3&v4
+    &v6&v7&n9) | (n1&n2&n3&n4&v5&v6&v7&n9) | (n0&v1&n2&v3&n4&v5
+    &n7&v9) | (v0&n1&n3&v4&v6&n7&v8&n9) | (v0&v1&n2&n4&n5&v6&v7
+    &v9) | (n2&v3&n4&v5&n6&v7&v8&v9) | (v0&v1&n2&v3&v4&n5&n7&v8) | (
+    n0&v1&v2&v5&n6&v7&v8&n9) | (v0&v1&n2&v3&n4&v5&v7&n8) | (v1&v2
+    &v3&n4&v5&n7&n8&n9) | (v0&v2&v4&n5&v6&n7&v8&n9) | (v0&v2&n3
+    &v4&v5&n6&v8&n9) | (v1&n2&n3&v5&v6&n7&v8&v9) | (n0&n1&n3&v4
+    &v5&n6&n7&n9) | (n1&n2&v3&v4&n5&v6&v7&v8) | (v0&n1&v2&v3&n4
+    &n5&v7&v8) | (n0&n1&v4&v5&n6&v7&n8&n9) | (n0&v2&v3&v4&v5&n7
+    &v8&v9) | (n1&v2&v3&v4&v5&n6&n7&v9) | (v0&v1&n4&n5&n6&n7&n8
+    &n9) | (v0&v1&n3&v5&v6&n7&n8&n9) | (v0&v1&n2&n5&v6&v7&n8&n9) | (
+    v1&v2&v3&v4&v5&n6&n8&n9) | (n1&n2&v4&v5&v6&n7&n8&v9) | (n1&v2
+    &v3&v4&n6&v7&v8&v9) | (v0&n1&n2&v4&v5&n6&v7&n8) | (v0&n2&v3&n4
+    &n6&n7&n8&n9) | (n0&v1&v2&n3&n4&v6&n7&n9) | (n0&v1&n2&n3
+    &v4&n5&v6&n9) | (n0&n1&n2&n3&n4&n6&n7&n9) | (n0&v1&v2&v3
+    &v4&n5&v8&v9) | (n1&n2&v3&v4&n5&n7&n8&n9) | (v0&n1&v2&n4&n5
+    &n6&n7&v9) | (v0&n1&n2&v3&n5&n6&n7&v8) | (v0&n1&v2&n3&n5&n7
+    &v8&n9) | (v0&v1&n2&n3&n4&v7&n8&v9) | (v0&v1&n2&v3&n4&n5&n7
+    &n8) | (n0&v1&v2&n3&n6&n7&v8&n9) | (n0&n1&v2&v3&n5&v7&v8&v9) | (
+    n0&n1&v2&n3&n4&v6&v8&v9) | (v1&n2&v3&n5&n6&n7&n8&n9) | (n0
+    &n2&v3&v4&n6&n7&n8&n9) | (n0&n2&n3&n4&n5&n6&v7&n9) | (v0
+    &n1&v3&n5&v6&n7&n8&v9) | (n1&v2&n3&n4&v5&v7&n8&v9) | (v0&v1
+    &v2&n3&n5&n6&v8&v9) | (n0&v1&v2&v3&v4&v6&n7&n8) | (v0&n1&v2&n3
+    &n5&n6&v7&v9) | (n1&n2&v3&n5&n6&v7&n8&v9) | (v0&n1&v2&n3&n5
+    &v6&n8&n9) | (n0&v1&v2&n3&v4&n7&n8&v9) | (n0&n2&v3&n4&n5&n6
+    &n8&v9) | (n0&v1&v2&n3&n5&n6&v7&v9) | (n0&n1&v2&n3&n5&v6&n7
+    &v8) | (n0&n1&n2&n3&v6&n7&n8&v9) | (n0&v1&v2&n3&n5&v6&v7&n8) | (
+    n0&v1&n3&v4&n5&v6&v7&v8&n9) | (v0&v1&v2&n3&v4&v6&v7&n8&n9) | (
+    v1&v2&v3&n4&v5&n6&v7&n8&v9) | (v0&n1&v2&v3&v4&n6&v7&n8&v9) | (
+    v0&n1&v2&v3&v4&v5&v6&v7) | (v0&n1&n2&v4&v5&n6&n7&v9) | (v1&v2&n3
+    &n4&v5&v6&v7&n9) | (n0&n2&n3&n4&v5&v6&v7&n9) | (n0&v1&v2&v3
+    &n4&v5&v8&v9) | (v0&v1&n2&v4&n5&v6&n7&v8) | (n0&v1&v2&n3&v5&v6
+    &n7&n9) | (v0&v1&n3&n4&n5&n6&n7&v8) | (n0&v1&n3&v5&n6&n7
+    &v8&v9) | (n0&v1&v2&n4&v5&v7&n8&v9) | (n0&v1&v2&v3&v4&v5&v6&n8) | (
+    n0&n1&v2&n3&n4&n5&v7&n9) | (n2&n3&v4&n5&v6&v7&n8&n9) | (
+    v0&v1&v2&n3&v4&v5&n6&n8) | (n1&n2&n3&v4&v5&n6&n7&n8) | (n0
+    &v1&n2&n3&n6&n7&n8&v9) | (v0&n1&v2&n4&v5&v6&v9) | (v0&n2&v3
+    &v4&v5&v6&n7) | (v0&v1&n3&n4&n7&v8&v9) | (v0&n1&n2&n3&v5&v7&v9) | (
+    v0&n1&v2&v4&v6&n8&n9) | (n0&n2&n3&n4&v6&v8&n9) | (n1&n2&n3
+    &v5&v6&v7&v8) | (n1&n2&n3&n4&v6&v7&v8) | (v2&n3&n4&v6&n7&v8&n9) | (
+    n0&v1&v2&n3&v4&v5&v8) | (n0&v2&v3&n4&v5&n6&v8) | (v0&v2&n4&n5
+    &n6&n7&v8) | (v1&v2&v3&n4&v6&v7&n8) | (v2&n3&v4&v5&n6&n7&v8) | (
+    v2&n3&n4&n5&n6&v8&n9) | (n0&n1&n3&v4&n5&v6&v9) | (v2&v3&v5
+    &v6&v7&n8&v9) | (v2&n3&v4&n5&v7&v8&v9) | (v1&v2&v4&n5&v6&n8&v9) | (
+    v0&n1&n2&v3&v4&v5&n7&v8);
 
 	end
 
