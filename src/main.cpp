@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
 	io_in->reset = 0;
 
 	io_in->stream = 1;
-	for (int i = 0; i < 1024; i++) {
+	for (int i = 0; i < 512; i++) {
 		ticktock();
 		output_t val = *(output_t*)&(top->io_out);
 		print_7segment(val);
