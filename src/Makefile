@@ -6,7 +6,10 @@ VERILATOR = $(VERILATOR_ROOT)/bin/verilator
 endif
 
 all:
-	$(VERILATOR) -cc -CFLAGS "-O3 -Wall" --exe --build -j decoder.v pi.v --top-module jar_pi main.cpp
+	$(VERILATOR) -cc -CFLAGS "-O3 -Wall" --exe --build -j decoder.v jar_pi.v --top-module jar_pi main.cpp
+
+lint:
+	$(VERILATOR) --lint-only -Wall decoder.v jar_pi.v
 
 test: all
 	./obj_dir/Vjar_pi
