@@ -4,14 +4,14 @@ module jar_pi
 	output [7:0] io_out
 );
 	wire       clk      = io_in[0];
-	wire       reset    = io_in[1];
-	wire       stream   = io_in[2];
-	wire [4:0] io_index = io_in[7:3];
+	//wire       reset    = io_in[1];
+	//wire       stream   = io_in[2];
+	//wire [4:0] io_index = io_in[7:3];
 
 	reg [9:0] index;
-	reg [7:0] led_out;
+	//reg [7:0] led_out;
 	wire [3:0] hex;
-	assign io_out[7:0] = led_out;
+	//assign io_out[7:0] = led_out;
 
 	wire v0 = index[9];
 	wire v1 = index[8];
@@ -36,12 +36,12 @@ module jar_pi
 	wire n9 = !v9;
 
 	always @(posedge clk) begin
-		if (reset) begin
-			index <= {io_index, index[9:5]};
-		end
-		else if (stream) begin
+	//	if (reset) begin
+	//		index <= {io_index, index[9:5]};
+	//	end
+	//	else if (stream) begin
 			index <= index + 1;
-		end
+	//	end
 
 hex[3] <= (v0&v1&n2&v3&v4&n5&n6&v7&v8&n9) | (v0&n1&n2&v3&n4&n5&n6
     &v7&v8&n9) | (v0&n1&v2&n3&v4&v5&v6&n7&v8&n9) | (v0&v1&v2&v3&n4
@@ -388,6 +388,7 @@ hex[0] <= (v0&v1&n2&v3&v4&v5&v6&v7&v8&v9) | (v0&n1&n2&v3&n4&v5&n6&n7
 
 	end
 
-	decoder decoder(.hex(hex), .segments(led_out));
+	//decoder decoder(.hex(hex), .segments(led_out));
+	decoder decoder(.hex(hex), .segments(io_out));
 
 endmodule
