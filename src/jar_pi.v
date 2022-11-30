@@ -4,9 +4,9 @@ module jar_pi
 	output [7:0] io_out
 );
 	wire       clk      = io_in[0];
-	wire       reset    = io_in[1];
-	wire       stream   = io_in[2];
-	wire [4:0] io_index = io_in[7:3];
+//	wire       reset    = io_in[1];
+//	wire       stream   = io_in[2];
+//	wire [4:0] io_index = io_in[7:3];
 
 	reg [9:0] index;
 	//reg [7:0] led_out;
@@ -25,12 +25,12 @@ module jar_pi
 	wire a = index[0];
 
 	always @(posedge clk) begin
-		if (reset) begin
-			index <= {io_index, index[9:5]};
-		end
-		else if (stream) begin
+//		if (reset) begin
+//			index <= {io_index, index[9:5]};
+//		end
+//		else if (stream) begin
 			index <= index + 1;
-		end
+//		end
 
 code[3] <= j?(i?((h&g&!f&e&!d&c&!b&!a)|(!h&g&f&!e&!d&c&b&!a)|(h&!g&f&!e&d&c&b&!a)|(h&g&f&!e&!d&c&b&a)|(!h&g&e&!d&!c&b&!a)|(!h&!g&f&!e&d&c&b&a)|(!h&g&!f&!e&c&!b&a)|(!h&g&e&d&c&b&a)|(g&!f&e&!d&!c&!b&a)|(!h&!g&f&!e&d&!c&!b&!a)|(!h&g&f&e&!d&!c&!a)|(h&g&e&d&!c&b&a)|(!h&!g&!f&e&d&b&a)|(!h&g&!e&!d&c&!b&a)|(h&g&!e&d&!c&!b&!a)|(!h&g&f&!e&!c&!b&a)|(!h&!g&!f&!e&!d&!b&a)|(h&!g&f&e&!d&b&a)|(h&!f&!e&d&!c&!b&!a)|(h&!f&e&!d&!c&!b&a)|(!g&f&e&d&c&!b&a)|(h&f&!e&d&!c&b&a)|(h&!g&f&!e&!d&c&!b)|(!g&f&!e&!d&!c&!b&a)|(h&f&e&d&!c&!b&a)|(!h&!g&f&!d&!c&!b&a)|(h&g&!f&e&d&c&a)|(!h&!g&!f&!d&!c&!b&!a)|(!h&!g&!f&!e&d&!c&b)|(h&g&f&!e&d&!b&a)|(h&!g&!f&d&c&!b&a)|(!g&!f&!d&c&b&a)):((!h&g&!f&!e&d&c&!b&a)|(!h&g&!f&!e&!d&c&b&!a)|(!h&g&f&e&!d&!c&!b&!a)|(h&!g&f&e&d&!c&b&!a)|(!h&g&!f&e&!d&!c&b&a)|(h&!g&!f&!e&!d&!c&!b&!a)|(h&!g&f&!e&d&c&b&a)|(g&!f&!e&d&!c&b&a)|(!h&!f&e&d&c&b&a)|(h&!g&f&!e&!d&c&!b&!a)|(h&g&!f&e&d&b&!a)|(h&!f&!e&d&c&b&a)|(h&g&!f&!e&!d&!c&b)|(h&!g&!f&d&!c&!b&a)|(h&g&f&e&d&b&a)|(!h&!g&!f&e&!d&b&!a)|(h&g&e&!d&!c&b&!a)|(!h&f&e&d&c&!b&a)|(h&g&e&d&c&!b&a)|(!h&!g&!e&d&!c&b&!a)|(h&!g&e&d&!c&!b&a)|(h&!g&f&!d&c&b&!a)|(!g&f&e&!d&c&!b&a)|(!h&!g&f&!e&!d&c&b)|(h&g&!e&!d&!c&b&a)|(!h&!g&!f&e&!d&!c&!a)|(h&!g&e&!d&!c&b&a)|(g&f&d&c&!b&!a)|(h&g&f&d&c&!b)|(h&g&f&e&d&c))):(i?((!h&!g&!f&e&d&!c&!b&!a)|(h&!g&f&e&d&!c&!b&a)|(h&!g&!f&!e&!d&c&!b&a)|(!h&g&!f&!e&d&c&b&a)|(h&g&!f&e&d&!c&!b&a)|(!h&!g&!f&e&d&c&!b&a)|(h&!g&!f&e&d&c&b&a)|(h&!g&!f&!e&d&!c&!b&!a)|(!h&g&f&!e&!d&!c&b&!a)|(!h&g&!f&!e&d&!c&!b&a)|(!h&g&!f&e&!d&!c&!b&a)|(!h&!g&f&e&d&c&b)|(h&f&!e&d&!c&b&!a)|(!g&f&e&!d&!c&b&!a)|(!g&!f&!e&!d&!c&!b&!a)|(h&!f&!e&!d&!c&!b&!a)|(h&g&f&!e&d&!b&!a)|(!h&g&f&!d&c&!b&a)|(h&!g&e&!d&!c&!b&!a)|(!h&g&e&!d&c&b&!a)|(!h&g&f&!e&!d&!b&a)|(h&g&f&e&!d&c&b)|(h&g&!f&e&!c&b&!a)|(g&!f&!e&!d&!c&b&a)|(h&g&f&e&!d&!c&a)|(h&g&f&!e&!d&!c&b)|(!g&f&!e&!d&c&b&a)|(h&!g&f&!e&!d&!c&a)|(h&g&!f&!e&d&c&!b)|(!h&!f&!e&c&!b&!a)):((!h&g&f&!e&!d&c&b&!a)|(!h&!g&f&!e&d&c&b&!a)|(h&!g&!f&e&!d&c&!b&!a)|(!h&g&!f&!e&!d&c&!b&!a)|(!h&!g&f&!e&!d&c&!b&!a)|(!h&!g&!f&!e&!d&!c&!b&a)|(!h&g&f&!e&d&c&!b&!a)|(!h&g&f&e&d&c&!b&a)|(!h&!g&!f&!e&!d&c&b&!a)|(h&g&!f&!e&d&!c&!b&!a)|(!h&!g&f&e&d&!c&!b&!a)|(!h&g&e&!d&!c&b&!a)|(h&!g&f&!e&!c&b&!a)|(g&f&!e&d&!c&b&!a)|(h&g&!f&!e&c&b&!a)|(!h&!g&!f&e&!c&b&a)|(h&!g&!f&!d&c&b&a)|(h&g&!f&e&c&b&a)|(!h&!g&f&!e&!d&b&a)|(h&!g&f&e&d&c&b)|(!h&!g&f&d&!c&b&a)|(!h&g&!f&!e&d&b&a)|(h&!g&!f&e&!c&!b&a)|(!h&g&!f&e&!d&!b&a)|(!h&g&!f&e&!c&!b&a)|(h&!g&f&d&c&!b&!a)|(g&f&!e&!d&c&!b&a)|(!g&f&e&!d&c&!b&a)|(h&g&!e&d&c&!b&a)|(!h&!g&!f&!e&d&c&!b)|(h&!f&!e&!d&!c&b&!a)|(h&g&f&e&d&!c&!a)|(!h&f&e&d&!c&b&a)|(h&!f&e&!d&!c&!b&a)|(!h&g&!f&e&!d&!c&!b)|(!g&f&e&d&c&b&a)|(!h&!g&!f&d&c&b&a)|(!h&!g&!e&d&c&!b&a)));
 
