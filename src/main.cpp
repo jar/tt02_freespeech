@@ -82,14 +82,14 @@ int main(int argc, char* argv[])
 
 	int err = 0;
 
-//	io_in->reset = 1;
-//	io_in->index = 0; // start index (low 5 bits)
-//	ticktock();
-//	io_in->index = 0; // start index (high 5 bits)
-//	ticktock();
-//	io_in->reset = 0;
+	io_in->reset = 1;
+	io_in->index = 0; // start index (low 5 bits)
+	ticktock();
+	io_in->index = 0; // start index (high 5 bits)
+	ticktock();
+	io_in->reset = 0;
 
-//	io_in->stream = 1;
+	io_in->stream = 1;
 	for (int i = 0; i < 1024; i++) {
 		ticktock();
 		output_t val = *(output_t*)&(top->io_out);
