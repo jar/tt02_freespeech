@@ -12,20 +12,23 @@
 
 module decoder (
 	input wire [3:0] code,
-	output wire [7:0] segments
+	output reg [7:0] segments
 );
-	wire d = code[3];
-	wire c = code[2];
-	wire b = code[1];
-	wire a = code[0];
-
-	assign segments[7] = (d&!c&b&!a);
-	assign segments[6] = (!c&b&a) | (d&!c&!b) | (!d&!c&b&!a) | (c&!b&!a) | (c&!b&a) | (c&b&!a);
-	assign segments[5] = (d&!c&!b) | (c&!b&!a) | (!c&!b&!a) | (c&!b&a) | (c&b&!a);
-	assign segments[4] = (!d&!c&b&!a) | (!c&!b&!a) | (c&b&!a);
-	assign segments[3] = (!c&b&a) | (!d&!c&b&!a) | (!c&!b&!a) | (c&!b&a) | (c&b&!a);
-	assign segments[2] = (!c&!b) | (c&!b&!a) | (b&a) | (c&!b&a) | (c&b&!a);
-	assign segments[1] = (!c&!b) | (!d&!c&b&!a) | (c&!b&!a) | (b&a);
-	assign segments[0] = (d&!c&!b) | (!d&!c&b&!a) | (b&a) | (!c&!b&!a) | (c&!b&a) | (c&b&!a);
-
+	always @(*) begin
+		/* verilator lint_off CASEX */
+		casex(code)
+			4'b0000: segments = 8'b00111111;
+			4'b0001: segments = 8'b00000110;
+			4'b0010: segments = 8'b01011011;
+			4'bx011: segments = 8'b01001111;
+			4'bx100: segments = 8'b01100110;
+			4'bx101: segments = 8'b01101101;
+			4'bx110: segments = 8'b01111101;
+			4'bx111: segments = 8'b00000111;
+			4'b1000: segments = 8'b01111111;
+			4'b1001: segments = 8'b01100111;
+			4'b1010: segments = 8'b10000000;
+		endcase
+		/* verilator lint_on CASEX */
+	end
 endmodule
