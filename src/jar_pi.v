@@ -5,17 +5,16 @@ module jar_pi
 );
 	wire       clk      = io_in[0];
 	wire       reset    = io_in[1];
-	//wire       stream   = io_in[2];
-	wire [4:0] io_index = io_in[7:3];
+	wire [5:0] io_index = io_in[7:2];
 
 	reg [9:0] index;
 	reg [3:0] code;
 
 	always @(posedge clk) begin
 		if (reset) begin
-			index <= {io_index, index[9:5]};
+			index <= {4'b0000, io_index};
 		end
-		else begin //if (stream) begin
+		else begin
 			index <= index + 1;
 
 			/* verilator lint_off CASEX */
