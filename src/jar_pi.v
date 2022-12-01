@@ -5,19 +5,17 @@ module jar_pi
 );
 	wire       clk      = io_in[0];
 	wire       reset    = io_in[1];
-	wire       stream   = io_in[2];
+	//wire       stream   = io_in[2];
 	wire [4:0] io_index = io_in[7:3];
 
 	reg [9:0] index;
-	reg [7:0] led_out;
 	reg [3:0] code;
-	assign io_out[7:0] = led_out;
 
 	always @(posedge clk) begin
 		if (reset) begin
 			index <= {io_index, index[9:5]};
 		end
-		else if (stream) begin
+		else begin //if (stream) begin
 			index <= index + 1;
 
 			/* verilator lint_off CASEX */
@@ -1051,6 +1049,6 @@ module jar_pi
 		end
 	end
 
-	decoder decoder(.code(code), .segments(led_out));
+	decoder decoder(.code(code), .segments(io_out));
 
 endmodule

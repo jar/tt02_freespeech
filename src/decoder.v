@@ -11,8 +11,8 @@
 */
 
 module decoder (
-	input wire [3:0] code,
-	output reg [7:0] segments
+	input reg [3:0] code,
+	output [7:0] segments
 );
 	always @(*) begin
 		/* verilator lint_off CASEX */
