@@ -12,7 +12,7 @@ typedef struct {
 		struct {
 			uint8_t clk    : 1;
 			uint8_t reset  : 1;
-			uint8_t index  : 6;
+			uint8_t unused : 6;
 		};
 	};
 } input_t;
@@ -82,7 +82,6 @@ int main(int argc, char* argv[])
 	int err = 0;
 
 	io_in->reset = 1;
-	io_in->index = 0; // start index (low 6 bits)
 	ticktock();
 	io_in->reset = 0;
 

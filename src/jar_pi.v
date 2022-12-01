@@ -5,14 +5,13 @@ module jar_pi
 );
 	wire       clk      = io_in[0];
 	wire       reset    = io_in[1];
-	wire [5:0] io_index = io_in[7:2];
 
 	reg [9:0] index;
 	reg [3:0] code;
 
 	always @(posedge clk) begin
 		if (reset) begin
-			index <= {4'b0000, io_index};
+			index <= 0;
 		end
 		else begin
 			index <= index + 1;
